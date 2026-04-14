@@ -17,20 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Configure matplotlib to use Chinese fonts
 RUN python3 -c "import matplotlib; print(matplotlib.get_cachedir())" && \
-    python3 -c "
-import matplotlib
-import os
-# Update matplotlibrc
-rc_path = matplotlib.matplotlib_fname()
-with open(rc_path, 'r') as f:
-    content = f.read()
-content = content.replace('#font.sans-serif:', 'font.sans-serif: WenQuanYi Zen Hei, WenQuanYi Micro Hei, Noto Sans CJK SC, DejaVu Sans,')
-content = content.replace('#axes.unicode_minus: True', 'axes.unicode_minus: False')
-with open(rc_path, 'w') as f:
-    f.write(content)
-print('matplotlibrc configured for Chinese fonts')
-" && \
-    # Clear font cache
+    python3 -c "import matplotlib; import os; rc_path = matplotlib.matplotlib_fname(); f = open(rc_path, 'r'); content = f.read(); f.close(); content = content.replace('#font.sans-serif:', 'font.sans-serif: WenQuanYi Zen Hei, WenQuanYi Micro Hei, Noto Sans CJK SC, DejaVu Sans,'); content = content.replace('#axes.unicode_minus: True', 'axes.unicode_minus: False'); f = open(rc_path, 'w'); f.write(content); f.close(); print('matplotlibrc configured for Chinese fonts')" && \
     rm -rf /root/.cache/matplotlib /root/.matplotlib/fontlist-*.json
 
 # Copy notebooks
