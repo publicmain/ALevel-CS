@@ -118,10 +118,13 @@ CHAPTER_INFO = {
 # Custom CSS to inject into converted HTML for code toggle
 CUSTOM_CSS = '''
 <style>
-.jp-InputArea, .jp-Cell-inputWrapper, .input, .input_area, div.input {
-  display: none !important;
+/* Only hide CODE cell inputs, keep markdown text visible */
+.jp-CodeCell .jp-Cell-inputWrapper,
+.jp-CodeCell .jp-InputArea,
+div.code_cell div.input,
+div.code_cell div.input_area {
+  display: none;
 }
-.jp-OutputArea, .output, .output_area { display: block !important; }
 body { padding: 20px; }
 .toggle-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
@@ -144,7 +147,7 @@ body { padding: 20px; }
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
   <button onclick="
-    var inputs = document.querySelectorAll('.jp-InputArea, .jp-Cell-inputWrapper, .input, .input_area, div.input');
+    var inputs = document.querySelectorAll('.jp-CodeCell .jp-Cell-inputWrapper, .jp-CodeCell .jp-InputArea, div.code_cell div.input');
     var show = this.dataset.show !== 'true';
     this.dataset.show = show;
     this.textContent = show ? 'Hide Code' : 'Show Code';
@@ -181,7 +184,6 @@ def convert_to_html(nb_path, output_dir):
         subprocess.run([
             'jupyter', 'nbconvert',
             '--to', 'html',
-            '--no-input',
             '--output-dir', output_dir,
             nb_path
         ], check=True, capture_output=True, timeout=60)
@@ -192,11 +194,6 @@ def convert_to_html(nb_path, output_dir):
                 content = f.read()
             content = content.replace('<body', '<body style="padding-top:50px"')
             content = content.replace('</head>', CUSTOM_CSS + '</head>')
-            # Remove the --no-input hiding so toggle can work
-            content = content.replace(
-                'display: none !important;',
-                'display: none;'
-            )
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(content)
         return html_path
