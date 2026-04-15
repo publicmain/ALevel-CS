@@ -125,28 +125,7 @@ div.code_cell div.input,
 div.code_cell div.input_area {
   display: none;
 }
-body { padding: 20px; }
-/* Center content */
-#notebook-container, .jp-Notebook, .jp-Cell, body > div:not(.toggle-bar) {
-  max-width: 900px; margin-left: auto; margin-right: auto;
-}
-.jp-RenderedHTMLCommon, .rendered_html, .text_cell_render {
-  text-align: center;
-}
-.jp-RenderedHTMLCommon ul, .jp-RenderedHTMLCommon ol,
-.rendered_html ul, .rendered_html ol {
-  display: inline-block; text-align: left;
-}
-.jp-RenderedHTMLCommon table, .rendered_html table {
-  margin-left: auto; margin-right: auto;
-}
-.jp-OutputArea-output, .output_subarea {
-  display: flex; flex-direction: column; align-items: center;
-}
-.jp-OutputArea-output img, .output_subarea img,
-.jp-OutputArea-output svg, .output_subarea svg {
-  max-width: 100%;
-}
+body { padding: 20px; margin: 0 auto; max-width: 960px; }
 .toggle-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
   background: linear-gradient(135deg, #302b63, #24243e);
