@@ -161,8 +161,8 @@ body { padding: 20px; margin: 0 auto; max-width: 960px; }
 #notebook-container, .jp-Notebook, body > div { padding-top: 50px !important; }
 '''
 
-# CSS for THEORY chapters: code hidden by default, "Show Code" button
-CUSTOM_CSS_HIDDEN = '''
+# CSS that goes in <head> - shared by both modes
+_HEAD_CSS = '''
 <style>
 /* Hide CODE cell inputs when body has .code-hidden class */
 body.code-hidden .jp-CodeCell .jp-Cell-inputWrapper,
@@ -171,33 +171,29 @@ body.code-hidden div.code_cell div.input,
 body.code-hidden div.code_cell div.input_area {
   display: none !important;
 }
+/* Hide the old in-notebook toggle button */
+.celltag_toggle-button { display: none !important; }
+#toggle-code-btn { display: none !important; }
 ''' + _BASE_CSS + '''
 </style>
-<script>document.body.classList.add('code-hidden');</script>
+'''
+
+# Toggle bar HTML that goes right after <body> tag
+_TOGGLE_BAR_HIDDEN = '''
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
-  <button onclick="
+  <button id="code-toggle-btn" onclick="
     document.body.classList.toggle('code-hidden');
     this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
   ">Show Code</button>
 </div>
+<script>document.body.classList.add('code-hidden');</script>
 '''
 
-# CSS for PROGRAMMING chapters: code visible by default, "Hide Code" button
-CUSTOM_CSS_VISIBLE = '''
-<style>
-/* Hide CODE cell inputs when body has .code-hidden class */
-body.code-hidden .jp-CodeCell .jp-Cell-inputWrapper,
-body.code-hidden .jp-CodeCell .jp-InputArea,
-body.code-hidden div.code_cell div.input,
-body.code-hidden div.code_cell div.input_area {
-  display: none !important;
-}
-''' + _BASE_CSS + '''
-</style>
+_TOGGLE_BAR_VISIBLE = '''
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
-  <button onclick="
+  <button id="code-toggle-btn" onclick="
     document.body.classList.toggle('code-hidden');
     this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
   ">Hide Code</button>
@@ -244,9 +240,20 @@ def convert_to_html(nb_path, output_dir, code_visible=False):
         if os.path.exists(html_path):
             with open(html_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            css = CUSTOM_CSS_VISIBLE if code_visible else CUSTOM_CSS_HIDDEN
-            content = content.replace('<body', '<body style="padding-top:50px"')
-            content = content.replace('</head>', css + '</head>')
+            # CSS goes in <head>
+            content = content.replace('</head>', _HEAD_CSS + '</head>')
+            # Toggle bar + script go right after <body ...> tag
+            toggle_bar = _TOGGLE_BAR_VISIBLE if code_visible else _TOGGLE_BAR_HIDDEN
+            body_match = re.search(r'<body[^>]*>', content)
+            if body_match:
+                insert_pos = body_match.end()
+                content = content[:insert_pos] + '\n' + toggle_bar + content[insert_pos:]
+            # Remove inline display styles on code cells set by old toggle
+            content = re.sub(
+                r'(class="jp-Cell-inputWrapper"[^>]*) style="display:\s*\w+;?"',
+                r'\1',
+                content
+            )
             # Fix internal links: .ipynb -> .html
             content = content.replace('.ipynb"', '.html"')
             content = content.replace('.ipynb#', '.html#')
