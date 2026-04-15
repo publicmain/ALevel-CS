@@ -493,7 +493,11 @@ def build_past_papers():
 
     print(f'\nBuilding past papers ({len(md_files)} files)...')
 
-    lessons_html = []
+    # Categorize files into Questions, Answers, Homework
+    questions_html = []
+    answers_html = []
+    homework_html = []
+
     for md_path in md_files:
         basename = os.path.splitext(os.path.basename(md_path))[0]
         html_name = basename + '.html'
@@ -512,35 +516,77 @@ def build_past_papers():
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(page)
 
-        # Build link for index
+        # Build link for index - categorize by type
         rel_path = f'past_papers/{html_name}'
         display = re.sub(r'^Ch\d*_', '', basename).replace('_', ' ')
-        lessons_html.append(
-            f'<a class="lesson" href="{rel_path}">'
-            f'<span class="lesson-icon">📝</span>{display}</a>'
-        )
+
+        if 'Homework' in basename:
+            homework_html.append(
+                f'<a class="lesson" href="{rel_path}">'
+                f'<span class="lesson-icon">📋</span>{display}</a>')
+        elif 'Answers' in basename:
+            answers_html.append(
+                f'<a class="lesson" href="{rel_path}">'
+                f'<span class="lesson-icon">✅</span>{display}</a>')
+        else:
+            questions_html.append(
+                f'<a class="lesson" href="{rel_path}">'
+                f'<span class="lesson-icon">📝</span>{display}</a>')
         print(f'  {basename}.html')
 
-    if not lessons_html:
+    if not questions_html and not answers_html and not homework_html:
         return ''
 
-    lessons_block = '\n'.join(lessons_html)
-    return f'''
+    sections = []
+    sections.append('''
 <div class="section-header">
-  <h2>Past Paper Questions</h2>
-  <p>Cambridge 9618 — Sorted by Topic (2021-2024)</p>
-</div>
+  <h2>Past Papers & Homework</h2>
+  <p>Cambridge 9618 — Questions, Answers & Assignments</p>
+</div>''')
+
+    if questions_html:
+        sections.append(f'''
 <div class="chapter">
   <div class="chapter-header">
     <div class="chapter-num" style="background:linear-gradient(135deg,#e67e22,#e74c3c);">📝</div>
     <div>
       <div class="chapter-title">历年考试题 Past Paper Questions</div>
-      <div class="chapter-title-en">Papers 1 & 2 — Organized by Chapter</div>
+      <div class="chapter-title-en">Papers 1 & 2 — Sorted by Topic (2021-2024)</div>
     </div>
     <span class="arrow">&#9654;</span>
   </div>
-  <div class="lessons">{lessons_block}</div>
-</div>'''
+  <div class="lessons">{chr(10).join(questions_html)}</div>
+</div>''')
+
+    if answers_html:
+        sections.append(f'''
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num" style="background:linear-gradient(135deg,#27ae60,#2ecc71);">✅</div>
+    <div>
+      <div class="chapter-title">参考答案 Mark Scheme Answers</div>
+      <div class="chapter-title-en">Detailed answers with marking points</div>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="lessons">{chr(10).join(answers_html)}</div>
+</div>''')
+
+    if homework_html:
+        sections.append(f'''
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num" style="background:linear-gradient(135deg,#3498db,#2980b9);">📋</div>
+    <div>
+      <div class="chapter-title">课后作业 Homework Assignments</div>
+      <div class="chapter-title-en">Practice worksheets for each chapter</div>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="lessons">{chr(10).join(homework_html)}</div>
+</div>''')
+
+    return '\n'.join(sections)
 
 
 if __name__ == '__main__':
