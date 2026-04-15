@@ -194,6 +194,10 @@ def convert_to_html(nb_path, output_dir):
                 content = f.read()
             content = content.replace('<body', '<body style="padding-top:50px"')
             content = content.replace('</head>', CUSTOM_CSS + '</head>')
+            # Fix internal links: .ipynb -> .html
+            content = content.replace('.ipynb"', '.html"')
+            content = content.replace('.ipynb#', '.html#')
+            content = content.replace(".ipynb'", ".html'")
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(content)
         return html_path
