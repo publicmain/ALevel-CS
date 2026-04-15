@@ -134,16 +134,11 @@ CHAPTER_INFO = {
     '20': ('Advanced Programming', 'A2 Level Paper 4'),
 }
 
-# Custom CSS to inject into converted HTML for code toggle
-CUSTOM_CSS = '''
-<style>
-/* Only hide CODE cell inputs, keep markdown text visible */
-.jp-CodeCell .jp-Cell-inputWrapper,
-.jp-CodeCell .jp-InputArea,
-div.code_cell div.input,
-div.code_cell div.input_area {
-  display: none;
-}
+# Chapters where code should be VISIBLE by default (programming-heavy)
+CODE_VISIBLE_CHAPTERS = {'8', '9', '10', '11', '12', '16', '18', '19', '20'}
+
+# Base CSS shared by both modes
+_BASE_CSS = '''
 body { padding: 20px; margin: 0 auto; max-width: 960px; }
 .toggle-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
@@ -162,6 +157,19 @@ body { padding: 20px; margin: 0 auto; max-width: 960px; }
 }
 .toggle-bar button:hover { background: #764ba2; }
 #notebook-container, .jp-Notebook, body > div { padding-top: 50px !important; }
+'''
+
+# CSS for THEORY chapters: code hidden by default, "Show Code" button
+CUSTOM_CSS_HIDDEN = '''
+<style>
+/* Hide CODE cell inputs by default */
+.jp-CodeCell .jp-Cell-inputWrapper,
+.jp-CodeCell .jp-InputArea,
+div.code_cell div.input,
+div.code_cell div.input_area {
+  display: none;
+}
+''' + _BASE_CSS + '''
 </style>
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
@@ -172,6 +180,24 @@ body { padding: 20px; margin: 0 auto; max-width: 960px; }
     this.textContent = show ? 'Hide Code' : 'Show Code';
     inputs.forEach(function(el){ el.style.display = show ? 'block' : 'none'; });
   ">Show Code</button>
+</div>
+'''
+
+# CSS for PROGRAMMING chapters: code visible by default, "Hide Code" button
+CUSTOM_CSS_VISIBLE = '''
+<style>
+/* Code visible by default for programming chapters */
+''' + _BASE_CSS + '''
+</style>
+<div class="toggle-bar">
+  <a href="/index.html">&#8592; Back to Index</a>
+  <button data-show="true" onclick="
+    var inputs = document.querySelectorAll('.jp-CodeCell .jp-Cell-inputWrapper, .jp-CodeCell .jp-InputArea, div.code_cell div.input');
+    var show = this.dataset.show !== 'true';
+    this.dataset.show = show;
+    this.textContent = show ? 'Hide Code' : 'Show Code';
+    inputs.forEach(function(el){ el.style.display = show ? 'block' : 'none'; });
+  ">Hide Code</button>
 </div>
 '''
 
@@ -193,8 +219,12 @@ def execute_notebook(nb_path):
         return False
 
 
-def convert_to_html(nb_path, output_dir):
-    """Convert notebook to HTML."""
+def convert_to_html(nb_path, output_dir, code_visible=False):
+    """Convert notebook to HTML.
+
+    Args:
+        code_visible: If True, code cells are shown by default (for programming chapters)
+    """
     os.makedirs(output_dir, exist_ok=True)
     basename = os.path.splitext(os.path.basename(nb_path))[0]
     html_path = os.path.join(output_dir, basename + '.html')
@@ -211,8 +241,9 @@ def convert_to_html(nb_path, output_dir):
         if os.path.exists(html_path):
             with open(html_path, 'r', encoding='utf-8') as f:
                 content = f.read()
+            css = CUSTOM_CSS_VISIBLE if code_visible else CUSTOM_CSS_HIDDEN
             content = content.replace('<body', '<body style="padding-top:50px"')
-            content = content.replace('</head>', CUSTOM_CSS + '</head>')
+            content = content.replace('</head>', css + '</head>')
             # Fix internal links: .ipynb -> .html
             content = content.replace('.ipynb"', '.html"')
             content = content.replace('.ipynb#', '.html#')
@@ -284,8 +315,9 @@ def build_site():
             # Execute notebook
             execute_notebook(nb_path)
 
-            # Convert to HTML
-            html_path = convert_to_html(nb_path, output_dir)
+            # Convert to HTML (show code for programming chapters)
+            show_code = str(ch_num) in CODE_VISIBLE_CHAPTERS
+            html_path = convert_to_html(nb_path, output_dir, code_visible=show_code)
             if html_path:
                 nb_name = os.path.splitext(os.path.basename(nb_path))[0]
                 # Clean up display name
@@ -293,9 +325,10 @@ def build_site():
                 if not display_name:
                     display_name = nb_name
                 rel_path = os.path.relpath(html_path, SITE_DIR).replace('\\', '/')
+                icon = '💻' if show_code else '📖'
                 lessons_html.append(
                     f'<a class="lesson" href="{rel_path}">'
-                    f'<span class="lesson-icon">📖</span>{display_name}</a>'
+                    f'<span class="lesson-icon">{icon}</span>{display_name}</a>'
                 )
 
         lessons_block = '\n'.join(lessons_html)
