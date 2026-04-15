@@ -30,9 +30,9 @@ TOGGLE_CELL = {
         "  var btn = document.getElementById('toggle-code-btn');\n",
         "  var show = btn.dataset.show !== 'true';\n",
         "  btn.dataset.show = show;\n",
-        "  btn.textContent = show ? '\\u9690\\u85cf\\u4ee3\\u7801 \\ud83d\\udd12' : '\\u663e\\u793a\\u4ee3\\u7801 \\ud83d\\udd13';\n",
+        "  btn.textContent = show ? '隐藏代码 [Hide]' : '显示代码 [Show]';\n",
         "  cells.forEach(function(c){ c.style.display = show ? '' : 'none'; });\n",
-        "\">\\u663e\\u793a\\u4ee3\\u7801 \\ud83d\\udd13</button>\n",
+        "\">显示代码 [Show]</button>\n",
         "</div>\n",
         "'''))\n"
     ]
