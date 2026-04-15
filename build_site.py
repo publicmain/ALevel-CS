@@ -19,7 +19,7 @@ INDEX_TEMPLATE = '''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cambridge A-Level Computer Science (9618) - AS Level</title>
+<title>Cambridge A-Level Computer Science (9618) - AS & A2 Level</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -75,6 +75,17 @@ body {
   color: #fff; border-color: rgba(102, 126, 234, 0.3);
 }
 .lesson-icon { margin-right: 8px; }
+.section-header {
+  text-align: center; padding: 20px 0 10px;
+  margin-top: 30px; margin-bottom: 10px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.section-header:first-child { margin-top: 0; border-top: none; }
+.section-header h2 {
+  font-size: 1.4em; color: #a0a0ff;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.section-header p { color: #7070a0; font-size: 0.9em; margin-top: 4px; }
 .footer {
   text-align: center; padding: 30px;
   color: #555; font-size: 0.85em;
@@ -84,7 +95,7 @@ body {
 <body>
 <div class="header">
   <h1>Cambridge A-Level Computer Science</h1>
-  <p>Cambridge International AS Level (9618) - Interactive Course Materials</p>
+  <p>Cambridge International AS & A2 Level (9618) - Interactive Course Materials</p>
 </div>
 <div class="container">
 __CHAPTERS__
@@ -113,6 +124,14 @@ CHAPTER_INFO = {
     '10': ('Data Types & Structures', 'AS Level Paper 2'),
     '11': ('Programming', 'AS Level Paper 2'),
     '12': ('Software Development', 'AS Level Paper 2'),
+    '13': ('Advanced Data Representation', 'A2 Level Paper 3'),
+    '14': ('Communication & Internet Technologies', 'A2 Level Paper 3'),
+    '15': ('Hardware & Virtual Machines', 'A2 Level Paper 3'),
+    '16': ('Advanced System Software', 'A2 Level Paper 3'),
+    '17': ('Advanced Security', 'A2 Level Paper 3'),
+    '18': ('Artificial Intelligence', 'A2 Level Paper 3'),
+    '19': ('Computational Thinking & Problem-solving', 'A2 Level Paper 4'),
+    '20': ('Advanced Programming', 'A2 Level Paper 4'),
 }
 
 # Custom CSS to inject into converted HTML for code toggle
@@ -229,9 +248,27 @@ def build_site():
     )
 
     chapters_html = []
+    added_as_header = False
+    added_a2_header = False
 
     for ch_dir in chapter_dirs:
         ch_num = extract_chapter_num(ch_dir)
+
+        # Insert section headers
+        if ch_num <= 12 and not added_as_header:
+            chapters_html.append('''
+<div class="section-header">
+  <h2>AS Level</h2>
+  <p>Papers 1 & 2 — Sections 1-12</p>
+</div>''')
+            added_as_header = True
+        elif ch_num >= 13 and not added_a2_header:
+            chapters_html.append('''
+<div class="section-header">
+  <h2>A2 Level</h2>
+  <p>Papers 3 & 4 — Sections 13-20</p>
+</div>''')
+            added_a2_header = True
         ch_cn_title = extract_chapter_cn_title(ch_dir)
         ch_en_title = CHAPTER_INFO.get(str(ch_num), ('', ''))[0]
         ch_path = os.path.join(NOTEBOOK_DIR, ch_dir)
