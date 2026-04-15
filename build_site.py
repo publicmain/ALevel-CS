@@ -164,23 +164,21 @@ body { padding: 20px; margin: 0 auto; max-width: 960px; }
 # CSS for THEORY chapters: code hidden by default, "Show Code" button
 CUSTOM_CSS_HIDDEN = '''
 <style>
-/* Hide CODE cell inputs by default */
-.jp-CodeCell .jp-Cell-inputWrapper,
-.jp-CodeCell .jp-InputArea,
-div.code_cell div.input,
-div.code_cell div.input_area {
-  display: none;
+/* Hide CODE cell inputs when body has .code-hidden class */
+body.code-hidden .jp-CodeCell .jp-Cell-inputWrapper,
+body.code-hidden .jp-CodeCell .jp-InputArea,
+body.code-hidden div.code_cell div.input,
+body.code-hidden div.code_cell div.input_area {
+  display: none !important;
 }
 ''' + _BASE_CSS + '''
 </style>
+<script>document.body.classList.add('code-hidden');</script>
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
   <button onclick="
-    var inputs = document.querySelectorAll('.jp-CodeCell .jp-Cell-inputWrapper, .jp-CodeCell .jp-InputArea, div.code_cell div.input');
-    var show = this.dataset.show !== 'true';
-    this.dataset.show = show;
-    this.textContent = show ? 'Hide Code' : 'Show Code';
-    inputs.forEach(function(el){ el.style.display = show ? 'block' : 'none'; });
+    document.body.classList.toggle('code-hidden');
+    this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
   ">Show Code</button>
 </div>
 '''
@@ -188,17 +186,20 @@ div.code_cell div.input_area {
 # CSS for PROGRAMMING chapters: code visible by default, "Hide Code" button
 CUSTOM_CSS_VISIBLE = '''
 <style>
-/* Code visible by default for programming chapters */
+/* Hide CODE cell inputs when body has .code-hidden class */
+body.code-hidden .jp-CodeCell .jp-Cell-inputWrapper,
+body.code-hidden .jp-CodeCell .jp-InputArea,
+body.code-hidden div.code_cell div.input,
+body.code-hidden div.code_cell div.input_area {
+  display: none !important;
+}
 ''' + _BASE_CSS + '''
 </style>
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
-  <button data-show="true" onclick="
-    var inputs = document.querySelectorAll('.jp-CodeCell .jp-Cell-inputWrapper, .jp-CodeCell .jp-InputArea, div.code_cell div.input');
-    var show = this.dataset.show !== 'true';
-    this.dataset.show = show;
-    this.textContent = show ? 'Hide Code' : 'Show Code';
-    inputs.forEach(function(el){ el.style.display = show ? 'block' : 'none'; });
+  <button onclick="
+    document.body.classList.toggle('code-hidden');
+    this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
   ">Hide Code</button>
 </div>
 '''
