@@ -13,6 +13,7 @@ import re
 
 SITE_DIR = '/app/site'
 NOTEBOOK_DIR = '/app/notebooks'
+PAPERS_DIR = '/app/past_papers'
 
 INDEX_TEMPLATE = '''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -99,6 +100,7 @@ body {
 </div>
 <div class="container">
 __CHAPTERS__
+__PAST_PAPERS__
 </div>
 <div class="footer">
   <p>Cambridge International AS & A Level Computer Science (9618)</p>
@@ -345,13 +347,199 @@ def build_site():
   <div class="lessons">{lessons_block}</div>
 </div>''')
 
+    # Build past papers section
+    papers_html = build_past_papers()
+
     # Build index.html
     index_html = INDEX_TEMPLATE.replace('__CHAPTERS__', '\n'.join(chapters_html))
+    index_html = index_html.replace('__PAST_PAPERS__', papers_html)
     index_path = os.path.join(SITE_DIR, 'index.html')
     with open(index_path, 'w', encoding='utf-8') as f:
         f.write(index_html)
     print(f'\n✅ Site built at {SITE_DIR}')
     print(f'   Index: {index_path}')
+
+
+# Past papers HTML template for individual question pages
+PAPER_HTML_TEMPLATE = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__TITLE__</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+  background: #1a1a2e; color: #e0e0e0;
+  padding: 20px; margin: 0 auto; max-width: 960px;
+  padding-top: 60px;
+}
+.toggle-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: linear-gradient(135deg, #302b63, #24243e);
+  padding: 8px 20px; display: flex; align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3); gap: 15px;
+}
+.toggle-bar a { color: #a0a0c0; text-decoration: none; font-size: 14px; }
+.toggle-bar a:hover { color: #fff; }
+h1 { color: #fff; font-size: 1.6em; margin: 20px 0; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+h2 { color: #a0a0ff; font-size: 1.3em; margin: 30px 0 15px;
+     background: rgba(102,126,234,0.1); padding: 10px 15px; border-radius: 8px;
+     border-left: 4px solid #667eea; }
+h3 { color: #c0c0ff; font-size: 1.1em; margin: 20px 0 10px; }
+p, li { line-height: 1.8; margin: 6px 0; }
+blockquote { color: #8888aa; border-left: 3px solid #444; padding-left: 12px; margin: 10px 0; }
+code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+pre { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; overflow-x: auto;
+      margin: 10px 0; border: 1px solid rgba(255,255,255,0.1); }
+pre code { background: none; padding: 0; }
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0; }
+ul, ol { padding-left: 25px; }
+strong { color: #fff; }
+table { border-collapse: collapse; margin: 10px 0; width: 100%; }
+th, td { border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; text-align: left; }
+th { background: rgba(102,126,234,0.2); color: #fff; }
+.mark-badge { display: inline-block; background: #667eea; color: #fff;
+              padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-left: 5px; }
+</style>
+</head>
+<body>
+<div class="toggle-bar">
+  <a href="/index.html">&#8592; Back to Index</a>
+</div>
+__CONTENT__
+</body>
+</html>'''
+
+
+def md_to_html(md_text):
+    """Simple markdown to HTML converter for question files."""
+    import html as html_mod
+    lines = md_text.split('\n')
+    result = []
+    in_list = False
+    in_pre = False
+
+    for line in lines:
+        # Code blocks
+        if line.strip().startswith('```'):
+            if in_pre:
+                result.append('</code></pre>')
+                in_pre = False
+            else:
+                result.append('<pre><code>')
+                in_pre = True
+            continue
+        if in_pre:
+            result.append(html_mod.escape(line))
+            continue
+
+        # Close list if needed
+        if in_list and not line.strip().startswith('- ') and not line.strip().startswith('* '):
+            result.append('</ul>')
+            in_list = False
+
+        # Headers
+        if line.startswith('# '):
+            result.append(f'<h1>{line[2:]}</h1>')
+        elif line.startswith('## '):
+            result.append(f'<h2>{line[3:]}</h2>')
+        elif line.startswith('### '):
+            result.append(f'<h3>{line[4:]}</h3>')
+        elif line.startswith('> '):
+            result.append(f'<blockquote>{line[2:]}</blockquote>')
+        elif line.strip().startswith('- ') or line.strip().startswith('* '):
+            if not in_list:
+                result.append('<ul>')
+                in_list = True
+            item = line.strip()[2:]
+            result.append(f'<li>{item}</li>')
+        elif line.strip() == '---':
+            result.append('<hr>')
+        elif line.strip() == '':
+            result.append('')
+        else:
+            # Mark allocations styling
+            line = re.sub(r'\[(\d+)\s*marks?\]', r'<span class="mark-badge">\1 marks</span>', line)
+            # Bold
+            line = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', line)
+            # Inline code
+            line = re.sub(r'`(.+?)`', r'<code>\1</code>', line)
+            result.append(f'<p>{line}</p>')
+
+    if in_list:
+        result.append('</ul>')
+    if in_pre:
+        result.append('</code></pre>')
+
+    return '\n'.join(result)
+
+
+def build_past_papers():
+    """Convert past paper markdown files to HTML and return index section."""
+    if not os.path.isdir(PAPERS_DIR):
+        print('\nNo past_papers directory found, skipping.')
+        return ''
+
+    papers_output = os.path.join(SITE_DIR, 'past_papers')
+    os.makedirs(papers_output, exist_ok=True)
+
+    md_files = sorted(glob.glob(os.path.join(PAPERS_DIR, '*.md')))
+    if not md_files:
+        print('\nNo past paper markdown files found.')
+        return ''
+
+    print(f'\nBuilding past papers ({len(md_files)} files)...')
+
+    lessons_html = []
+    for md_path in md_files:
+        basename = os.path.splitext(os.path.basename(md_path))[0]
+        html_name = basename + '.html'
+        html_path = os.path.join(papers_output, html_name)
+
+        with open(md_path, 'r', encoding='utf-8') as f:
+            md_content = f.read()
+
+        # Extract title from first line
+        first_line = md_content.split('\n')[0]
+        title = first_line.lstrip('# ').strip() if first_line.startswith('#') else basename
+
+        # Convert and write
+        html_content = md_to_html(md_content)
+        page = PAPER_HTML_TEMPLATE.replace('__TITLE__', title).replace('__CONTENT__', html_content)
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(page)
+
+        # Build link for index
+        rel_path = f'past_papers/{html_name}'
+        display = re.sub(r'^Ch\d*_', '', basename).replace('_', ' ')
+        lessons_html.append(
+            f'<a class="lesson" href="{rel_path}">'
+            f'<span class="lesson-icon">📝</span>{display}</a>'
+        )
+        print(f'  {basename}.html')
+
+    if not lessons_html:
+        return ''
+
+    lessons_block = '\n'.join(lessons_html)
+    return f'''
+<div class="section-header">
+  <h2>Past Paper Questions</h2>
+  <p>Cambridge 9618 — Sorted by Topic (2021-2024)</p>
+</div>
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num" style="background:linear-gradient(135deg,#e67e22,#e74c3c);">📝</div>
+    <div>
+      <div class="chapter-title">历年考试题 Past Paper Questions</div>
+      <div class="chapter-title-en">Papers 1 & 2 — Organized by Chapter</div>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="lessons">{lessons_block}</div>
+</div>'''
 
 
 if __name__ == '__main__':
