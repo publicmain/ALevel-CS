@@ -6,8 +6,6 @@
 
 ## Question 1 — Von Neumann Architecture 冯·诺依曼架构 [6 marks]
 
-> 中文提示：冯·诺依曼架构是现代计算机的基本设计模型。核心思想是程序和数据存储在同一个存储器中。
-
 (a) State **three** features of the Von Neumann architecture.
 [3 marks]
 
@@ -21,8 +19,6 @@
 ---
 
 ## Question 2 — CPU Components 处理器组件 [6 marks]
-
-> 中文提示：CPU（中央处理器）由ALU（算术逻辑单元）、CU（控制单元）和寄存器（registers）组成。每个部分有不同的功能。
 
 (a) Describe the function of each of the following components of the CPU:
 
@@ -43,8 +39,6 @@
 ---
 
 ## Question 3 — Registers 寄存器 [5 marks]
-
-> 中文提示：寄存器是CPU内部的高速存储单元。不同寄存器有不同的功能，如PC、MAR、MDR、CIR、ACC等。
 
 State the name and describe the purpose of each of the following registers:
 
@@ -67,8 +61,6 @@ State the name and describe the purpose of each of the following registers:
 
 ## Question 4 — Buses 总线 [6 marks]
 
-> 中文提示：总线（bus）是连接CPU、内存和I/O设备的通信线路。三种总线是：地址总线（address bus）、数据总线（data bus）和控制总线（control bus）。
-
 (a) Describe the purpose of each of the following buses:
 
 (i) Address bus
@@ -84,8 +76,6 @@ State the name and describe the purpose of each of the following registers:
 
 ## Question 5 — Fetch-Execute Cycle 取指-执行周期 [8 marks]
 
-> 中文提示：取指-执行周期（也叫取指-译码-执行周期）是CPU执行指令的基本过程。需要描述每一步中涉及的寄存器和总线操作。
-
 (a) Describe the steps in the **fetch** stage of the fetch-execute cycle. You should refer to specific registers and buses in your answer.
 [4 marks]
 
@@ -98,8 +88,6 @@ State the name and describe the purpose of each of the following registers:
 ---
 
 ## Question 6 — Instruction Format and Addressing Modes 指令格式与寻址方式 [8 marks]
-
-> 中文提示：机器指令由操作码（opcode）和操作数（operand）组成。不同的寻址方式（addressing mode）决定了操作数如何被解释。
 
 (a) State what is meant by:
 
@@ -123,8 +111,6 @@ State the name and describe the purpose of each of the following registers:
 ---
 
 ## Question 7 — Addressing Modes in Practice 寻址方式实践 [5 marks]
-
-> 中文提示：本题要求你根据给定的内存内容，计算不同寻址方式下加载到ACC中的值。
 
 The following table shows the contents of some memory locations:
 
@@ -158,8 +144,6 @@ State the value loaded into the Accumulator for each of the following instructio
 ---
 
 ## Question 8 — Assembly Language Programming 汇编语言编程 [8 marks]
-
-> 中文提示：汇编语言使用助记符（mnemonics）来表示机器指令。常见指令包括LDD（加载）、STO（存储）、ADD（加法）、SUB（减法）、CMP（比较）、JMP（跳转）等。
 
 (a) The following assembly language program adds two numbers from memory and stores the result.
 
@@ -203,8 +187,6 @@ You may use the following instruction set:
 
 ## Question 9 — Bit Manipulation 位操作 [6 marks]
 
-> 中文提示：位操作使用AND、OR、XOR掩码来操作二进制数据中的特定位。AND用于清零/提取位，OR用于置位，XOR用于翻转位。
-
 An 8-bit register contains the value `10110101`.
 
 (a) A programmer wants to set bits 0 and 1 to 1, without changing any other bits.
@@ -220,11 +202,6 @@ State which logical operation and mask should be used, and show the result.
 [2 marks]
 
 ---
-
-### 答题完毕后请检查：
-- 取指-执行周期的描述是否按正确顺序，是否提到了关键的寄存器和总线
-- 汇编语言程序是否逻辑正确
-- 位操作题是否选择了正确的逻辑运算和掩码
 
 ---
 

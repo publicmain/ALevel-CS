@@ -6,8 +6,6 @@
 
 ## Question 1 — Network Types 网络类型 [4 marks]
 
-> 中文提示：LAN（局域网）和WAN（广域网）是两种基本网络类型。思考它们在范围、所有权、传输介质等方面的区别。
-
 (a) Define the term **LAN** (Local Area Network).
 [2 marks]
 
@@ -17,8 +15,6 @@
 ---
 
 ## Question 2 — Network Topologies 网络拓扑 [6 marks]
-
-> 中文提示：拓扑（topology）指网络中设备的物理或逻辑连接方式。星型（star）和总线型（bus）是常见的拓扑结构。
 
 (a) Draw a labelled diagram showing a **star** network topology with four workstations, a server and a central switch.
 [2 marks]
@@ -32,8 +28,6 @@
 ---
 
 ## Question 3 — Client-Server and Peer-to-Peer 客户端-服务器与对等网络 [6 marks]
-
-> 中文提示：客户端-服务器模式中有一台中央服务器提供服务；对等网络中所有计算机地位平等。想想各自适合什么场景。
 
 (a) Describe the **client-server** network model.
 [2 marks]
@@ -49,8 +43,6 @@ State which network model would be more suitable and give **one** reason for you
 
 ## Question 4 — Thin Client and Thick Client 瘦客户端与胖客户端 [4 marks]
 
-> 中文提示：瘦客户端（thin client）依赖服务器处理数据；胖客户端（thick client）本地处理能力强。思考两者在硬件需求、维护成本等方面的区别。
-
 (a) Describe what is meant by a **thin client**.
 [2 marks]
 
@@ -60,8 +52,6 @@ State which network model would be more suitable and give **one** reason for you
 ---
 
 ## Question 5 — Transmission Media and Wireless 传输介质与无线网络 [6 marks]
-
-> 中文提示：网络使用不同的传输介质，包括有线（铜线、光纤）和无线（WiFi）。每种方式有不同的特点。
 
 (a) Compare **Ethernet** (wired) and **WiFi** (wireless) connections by giving:
 
@@ -78,8 +68,6 @@ State which network model would be more suitable and give **one** reason for you
 
 ## Question 6 — The Internet and Infrastructure 互联网基础设施 [6 marks]
 
-> 中文提示：互联网由路由器（router）、网关（gateway）、ISP（互联网服务提供商）等组成。理解每个组件的作用。
-
 (a) Explain the role of the following devices in an internet connection:
 
 (i) Router
@@ -95,8 +83,6 @@ State which network model would be more suitable and give **one** reason for you
 
 ## Question 7 — IP Addressing IP地址 [6 marks]
 
-> 中文提示：IP地址用于标识网络中的设备。IPv4和IPv6是两种版本。还需要理解公有IP和私有IP的区别。
-
 (a) State what is meant by an **IP address**.
 [1 mark]
 
@@ -111,8 +97,6 @@ State where each type would be used.
 ---
 
 ## Question 8 — Protocols 网络协议 [6 marks]
-
-> 中文提示：协议（protocol）是网络通信的规则。常见协议包括TCP/IP、HTTP/HTTPS、FTP、SMTP、POP3/IMAP等。思考为什么需要标准协议。
 
 (a) Define the term **protocol** in the context of data communication.
 [1 mark]
@@ -135,8 +119,6 @@ State where each type would be used.
 
 ## Question 9 — Packet Switching and Circuit Switching 分组交换与电路交换 [8 marks]
 
-> 中文提示：数据传输有两种主要方式——分组交换（packet switching）将数据分成数据包通过不同路径传输；电路交换（circuit switching）建立一条专用通道。
-
 (a) Describe how data is transmitted across the internet using **packet switching**.
 Your answer should include reference to:
 - how the data is prepared for transmission
@@ -152,11 +134,6 @@ Your answer should include reference to:
 [2 marks]
 
 ---
-
-### 答题完毕后请检查：
-- 描述题（Describe）是否包含了足够的细节
-- 解释题（Explain）是否给出了原因
-- 比较题是否清楚地说明了两者的不同
 
 ---
 

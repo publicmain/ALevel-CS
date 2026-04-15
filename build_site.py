@@ -484,6 +484,135 @@ def md_to_html(md_text):
     return '\n'.join(result)
 
 
+HOMEWORK_ANSWER_PASSWORD = '123456!'
+
+# Template for password-protected homework answer pages
+PROTECTED_HTML_TEMPLATE = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__TITLE__ (Protected)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+  background: #1a1a2e; color: #e0e0e0;
+  padding: 20px; margin: 0 auto; max-width: 960px;
+  padding-top: 60px;
+}
+.toggle-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: linear-gradient(135deg, #302b63, #24243e);
+  padding: 8px 20px; display: flex; align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3); gap: 15px;
+}
+.toggle-bar a { color: #a0a0c0; text-decoration: none; font-size: 14px; }
+.toggle-bar a:hover { color: #fff; }
+h1 { color: #fff; font-size: 1.6em; margin: 20px 0; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+h2 { color: #a0a0ff; font-size: 1.3em; margin: 30px 0 15px;
+     background: rgba(102,126,234,0.1); padding: 10px 15px; border-radius: 8px;
+     border-left: 4px solid #667eea; }
+h3 { color: #c0c0ff; font-size: 1.1em; margin: 20px 0 10px; }
+p, li { line-height: 1.8; margin: 6px 0; }
+blockquote { color: #8888aa; border-left: 3px solid #444; padding-left: 12px; margin: 10px 0; }
+code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 3px; font-size: 0.95em; }
+pre { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; overflow-x: auto;
+      margin: 10px 0; border: 1px solid rgba(255,255,255,0.1); }
+pre code { background: none; padding: 0; }
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0; }
+ul, ol { padding-left: 25px; }
+strong { color: #fff; }
+table { border-collapse: collapse; margin: 10px 0; width: 100%; }
+th, td { border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; text-align: left; }
+th { background: rgba(102,126,234,0.2); color: #fff; }
+.mark-badge { display: inline-block; background: #667eea; color: #fff;
+              padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-left: 5px; }
+#password-gate {
+  text-align: center; padding: 80px 20px;
+}
+#password-gate h2 { text-align: center; border: none; background: none; color: #fff; font-size: 1.5em; }
+#password-gate input {
+  padding: 12px 20px; font-size: 16px; border-radius: 8px; border: 2px solid #667eea;
+  background: rgba(255,255,255,0.05); color: #fff; margin: 20px 10px; width: 250px;
+  outline: none;
+}
+#password-gate input:focus { border-color: #764ba2; }
+#password-gate button {
+  padding: 12px 30px; font-size: 16px; cursor: pointer;
+  background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
+  border: none; border-radius: 8px;
+}
+#password-gate button:hover { opacity: 0.9; }
+#password-gate .error { color: #e74c3c; margin-top: 10px; display: none; }
+#answer-content { display: none; }
+</style>
+</head>
+<body>
+<div class="toggle-bar">
+  <a href="/index.html">&#8592; Back to Index</a>
+</div>
+<div id="password-gate">
+  <h2>__TITLE__</h2>
+  <p style="color:#8888aa;margin:10px 0 30px;">This content is password-protected / 此内容需要密码访问</p>
+  <div>
+    <input type="password" id="pwd-input" placeholder="Enter password / 输入密码"
+           onkeydown="if(event.key==='Enter')document.getElementById('pwd-btn').click()">
+    <button id="pwd-btn" onclick="tryUnlock()">Unlock</button>
+  </div>
+  <p class="error" id="pwd-error">Incorrect password / 密码错误</p>
+</div>
+<div id="answer-content"></div>
+<script>
+var encData = "__ENCRYPTED__";
+var passHash = "__PASSHASH__";
+async function sha256(msg) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+function xorDecrypt(data, key) {
+  var raw = atob(data);
+  var rawBytes = new Uint8Array(raw.length);
+  for (var i = 0; i < raw.length; i++) rawBytes[i] = raw.charCodeAt(i);
+  var keyBytes = new TextEncoder().encode(key);
+  var dec = new Uint8Array(rawBytes.length);
+  for (var i = 0; i < rawBytes.length; i++) dec[i] = rawBytes[i] ^ keyBytes[i % keyBytes.length];
+  return new TextDecoder().decode(dec);
+}
+async function tryUnlock() {
+  var pwd = document.getElementById('pwd-input').value;
+  var hash = await sha256(pwd);
+  if (hash === passHash) {
+    var content = xorDecrypt(encData, pwd);
+    document.getElementById('answer-content').innerHTML = content;
+    document.getElementById('answer-content').style.display = 'block';
+    document.getElementById('password-gate').style.display = 'none';
+  } else {
+    var err = document.getElementById('pwd-error');
+    err.style.display = 'block';
+    setTimeout(function(){ err.style.display = 'none'; }, 2000);
+  }
+}
+</script>
+</body>
+</html>'''
+
+
+def encrypt_content(html_content, password):
+    """XOR encrypt HTML content with password, return base64."""
+    import base64
+    key = password.encode('utf-8')
+    data = html_content.encode('utf-8')
+    encrypted = bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
+    return base64.b64encode(encrypted).decode('ascii')
+
+
+def get_password_hash(password):
+    """SHA-256 hash of password."""
+    import hashlib
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+
 def build_past_papers():
     """Convert past paper markdown files to HTML and return index section."""
     if not os.path.isdir(PAPERS_DIR):
@@ -500,10 +629,11 @@ def build_past_papers():
 
     print(f'\nBuilding past papers ({len(md_files)} files)...')
 
-    # Categorize files into Questions, Answers, Homework
+    # Categorize files
     questions_html = []
     answers_html = []
     homework_html = []
+    hw_answers_html = []
 
     for md_path in md_files:
         basename = os.path.splitext(os.path.basename(md_path))[0]
@@ -513,21 +643,37 @@ def build_past_papers():
         with open(md_path, 'r', encoding='utf-8') as f:
             md_content = f.read()
 
-        # Extract title from first line
         first_line = md_content.split('\n')[0]
         title = first_line.lstrip('# ').strip() if first_line.startswith('#') else basename
 
-        # Convert and write
-        html_content = md_to_html(md_content)
-        page = PAPER_HTML_TEMPLATE.replace('__TITLE__', title).replace('__CONTENT__', html_content)
-        with open(html_path, 'w', encoding='utf-8') as f:
-            f.write(page)
+        is_hw_answer = 'Homework_Answers' in basename or 'Homework_Answer' in basename
 
-        # Build link for index - categorize by type
+        if is_hw_answer:
+            # Password-protected page
+            html_content = md_to_html(md_content)
+            encrypted = encrypt_content(html_content, HOMEWORK_ANSWER_PASSWORD)
+            pass_hash = get_password_hash(HOMEWORK_ANSWER_PASSWORD)
+            page = PROTECTED_HTML_TEMPLATE.replace('__TITLE__', title)
+            page = page.replace('__ENCRYPTED__', encrypted)
+            page = page.replace('__PASSHASH__', pass_hash)
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(page)
+        else:
+            # Normal page
+            html_content = md_to_html(md_content)
+            page = PAPER_HTML_TEMPLATE.replace('__TITLE__', title).replace('__CONTENT__', html_content)
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(page)
+
+        # Build link for index
         rel_path = f'past_papers/{html_name}'
         display = re.sub(r'^Ch\d*_', '', basename).replace('_', ' ')
 
-        if 'Homework' in basename:
+        if is_hw_answer:
+            hw_answers_html.append(
+                f'<a class="lesson" href="{rel_path}">'
+                f'<span class="lesson-icon">🔒</span>{display}</a>')
+        elif 'Homework' in basename:
             homework_html.append(
                 f'<a class="lesson" href="{rel_path}">'
                 f'<span class="lesson-icon">📋</span>{display}</a>')
@@ -539,9 +685,9 @@ def build_past_papers():
             questions_html.append(
                 f'<a class="lesson" href="{rel_path}">'
                 f'<span class="lesson-icon">📝</span>{display}</a>')
-        print(f'  {basename}.html')
+        print(f'  {"[PROTECTED] " if is_hw_answer else ""}{basename}.html')
 
-    if not questions_html and not answers_html and not homework_html:
+    if not questions_html and not answers_html and not homework_html and not hw_answers_html:
         return ''
 
     sections = []
@@ -591,6 +737,20 @@ def build_past_papers():
     <span class="arrow">&#9654;</span>
   </div>
   <div class="lessons">{chr(10).join(homework_html)}</div>
+</div>''')
+
+    if hw_answers_html:
+        sections.append(f'''
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);">🔒</div>
+    <div>
+      <div class="chapter-title">作业答案 Homework Answers (Password Protected)</div>
+      <div class="chapter-title-en">Teacher access only / 仅教师可访问</div>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="lessons">{chr(10).join(hw_answers_html)}</div>
 </div>''')
 
     return '\n'.join(sections)

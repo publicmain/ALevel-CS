@@ -22,8 +22,6 @@ ENDTYPE
 
 **(a)** State the most appropriate data type for each of the following values. Choose from: `INTEGER`, `REAL`, `CHAR`, `STRING`, `BOOLEAN`. [5]
 
-> 中文提示：选择最合适的数据类型。INTEGER=整数，REAL=小数，CHAR=单个字符，STRING=字符串，BOOLEAN=真/假。
-
 | Value | Data Type |
 |-------|-----------|
 | The number of students in a class (e.g. 32) | |
@@ -45,13 +43,8 @@ A school stores data about 200 students using a **record** structure. Each stude
 
 **(a)** Write pseudocode to define the record type `StudentRecord` and declare an array `Students` of 200 such records. [3]
 
-> 中文提示：先用TYPE...ENDTYPE定义记录类型，再用DECLARE声明一个包含200个记录的数组。
-
 ```
 TYPE StudentRecord
-
-
-
 
 ENDTYPE
 
@@ -60,22 +53,13 @@ DECLARE Students : ___________________________________
 
 **(b)** Write pseudocode to assign the following values to the first student in the array: StudentID = "S00001", Name = "Li Ming", Age = 16, AverageScore = 85.5, IsActive = TRUE. [2]
 
-> 中文提示：用点号(.)访问记录的字段，例如 Students[1].Name
-
 ```
-
-
-
-
 
 ```
 
 **(c)** Write pseudocode to output the names of all active students whose average score is above 90. [1]
 
 ```
-
-
-
 
 ```
 
@@ -87,11 +71,7 @@ A **stack** is an abstract data type (ADT).
 
 **(a)** Describe two key characteristics of a stack. [2]
 
-> 中文提示：栈的特点——后进先出(LIFO)，只能从顶部操作。
-
 ```
-
-
 
 ```
 
@@ -110,8 +90,6 @@ State the current value of `TopOfStack`. [1]
 3. `POP()`
 4. `PUSH(42)`
 
-> 中文提示：PUSH=入栈（放到顶部），POP=出栈（从顶部移除）。逐步画出每次操作后栈的状态。
-
 | Operation | Stack contents (bottom → top) | TopOfStack |
 |-----------|-------------------------------|------------|
 | Initial   | 10, 25, 7                     |            |
@@ -128,29 +106,16 @@ Write pseudocode for a **stack** implementation using a global array `Stack[1:10
 
 **(a)** Write a **procedure** `Push(Value : INTEGER)` that adds a value to the stack. The procedure should check for stack overflow (stack full) and output an error message if the stack is full. [3]
 
-> 中文提示：入栈操作——先检查Top是否等于100（满了），如果没满则Top加1，然后把值放在Stack[Top]。
-
 ```
 PROCEDURE Push(Value : INTEGER)
-
-
-
-
 
 ENDPROCEDURE
 ```
 
 **(b)** Write a **function** `Pop()` that removes and returns the top value from the stack. The function should check for stack underflow (stack empty) and return `-1` if the stack is empty. [3]
 
-> 中文提示：出栈操作——先检查Top是否等于0（空了），如果不为空则取出Stack[Top]的值，Top减1，返回取出的值。
-
 ```
 FUNCTION Pop() RETURNS INTEGER
-
-
-
-
-
 
 ENDFUNCTION
 ```
@@ -163,11 +128,7 @@ A **queue** is another abstract data type.
 
 **(a)** State the difference between how items are added and removed in a stack compared to a queue. [2]
 
-> 中文提示：栈是LIFO（后进先出），队列是FIFO（先进先出）。栈从同一端进出，队列从一端进、另一端出。
-
 ```
-
-
 
 ```
 
@@ -182,8 +143,6 @@ Show the state of the queue (including `Front`, `Rear`, and `Size`) after each o
 1. `Enqueue('D')`
 2. `Dequeue()`
 3. `Enqueue('E')`
-
-> 中文提示：环形队列——Rear指向下一个插入位置的前一个（或当前最后元素），Front指向第一个元素。入队时Rear移动，出队时Front移动。注意取模运算实现循环。
 
 | Operation | Front | Rear | Size | Queue[0] | Queue[1] | Queue[2] | Queue[3] | Queue[4] | Queue[5] |
 |-----------|-------|------|------|----------|----------|----------|----------|----------|----------|
@@ -200,24 +159,13 @@ A **linked list** stores data items where each node contains a data value and a 
 
 **(a)** Draw a diagram of a linked list containing the values `"Cat"`, `"Dog"`, `"Fish"` in that order. Include a `Start` pointer and show the null pointer at the end. [2]
 
-> 中文提示：链表图——每个节点画成两格（数据|指针），用箭头指向下一个节点，最后一个节点指针为null。
-
 ```
-
-
-
 
 ```
 
 **(b)** Describe the steps needed to insert a new node with value `"Bird"` at the **beginning** of the linked list from part (a). [3]
 
-> 中文提示：在链表头部插入——创建新节点，将新节点的指针指向当前第一个节点，然后更新Start指针指向新节点。
-
 ```
-
-
-
-
 
 ```
 
@@ -231,32 +179,16 @@ The file `students.txt` contains one student name per line. There are no more th
 
 **(a)** Write pseudocode to read all names from the file `students.txt` into a 1D array `Names[1:500]`, counting how many names were read into a variable `Count`. [4]
 
-> 中文提示：文件读取——用OPENFILE打开，用WHILE NOT EOF循环读取每一行（READFILE），存入数组并计数，最后CLOSEFILE。
-
 ```
 DECLARE Names : ARRAY[1:500] OF STRING
 DECLARE Count : INTEGER
 Count ← 0
 
-
-
-
-
-
-
-
 ```
 
 **(b)** Write pseudocode to **append** three new names entered by the user to the end of the file `students.txt`. [2]
 
-> 中文提示：追加写入——用OPENFILE("students.txt", APPEND)打开文件，用循环INPUT三个名字并WRITEFILE写入，最后CLOSEFILE。
-
 ```
-
-
-
-
-
 
 ```
 
@@ -266,17 +198,11 @@ Count ← 0
 
 **(a)** Define the term **abstract data type (ADT)**. [2]
 
-> 中文提示：抽象数据类型——描述数据的逻辑结构和可以执行的操作，不涉及具体实现方式。
-
 ```
-
-
 
 ```
 
 **(b)** A stack, a queue, and a linked list are all examples of ADTs. For each one, give **one** real-world application where it would be the most appropriate data structure to use. Justify each choice. [3]
-
-> 中文提示：每种数据结构举一个实际应用场景，并解释为什么这种结构最合适。
 
 | ADT | Application | Justification |
 |-----|-------------|---------------|
@@ -310,8 +236,6 @@ OUTPUT Total
 
 **(a)** Complete the table below showing the contents of `Grid` after the first pair of nested loops has executed. [2]
 
-> 中文提示：二维数组——Grid[Row, Col] = Row * Col。填入每个位置的计算结果。
-
 |       | Col 1 | Col 2 | Col 3 |
 |-------|-------|-------|-------|
 | Row 1 |       |       |       |
@@ -322,8 +246,6 @@ OUTPUT Total
 **(b)** State the value of `Total` that is output. Show your working. [2]
 
 ```
-
-
 
 ```
 
@@ -343,25 +265,12 @@ Write a **procedure** `Enqueue(Name : STRING)` and a **function** `Dequeue() RET
 - `Dequeue` should check if the queue is empty before removing
 - Implement as a **linear queue** (not circular)
 
-> 中文提示：入队——检查Rear是否等于50，没满则Rear+1并把Name放在PatientQueue[Rear]，QueueSize+1。出队——检查QueueSize是否为0，不为空则取出PatientQueue[Front]，Front+1，QueueSize-1。
-
 ```
 PROCEDURE Enqueue(Name : STRING)
-
-
-
-
-
 
 ENDPROCEDURE
 
 FUNCTION Dequeue() RETURNS STRING
-
-
-
-
-
-
 
 ENDFUNCTION
 ```
@@ -374,4 +283,3 @@ ENDFUNCTION
 
 **Total: 54 marks**
 
-> 提交提醒：请确保所有伪代码使用Cambridge 9618规范的语法格式。记录类型用TYPE...ENDTYPE定义，文件操作用OPENFILE/READFILE/WRITEFILE/CLOSEFILE。
