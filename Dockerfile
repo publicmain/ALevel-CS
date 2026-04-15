@@ -23,6 +23,11 @@ RUN python3 -c "import matplotlib; print(matplotlib.get_cachedir())" && \
 # Copy notebooks
 COPY notebooks/ /app/notebooks/
 
+# Pre-execute all notebooks so outputs are ready on open
+ENV MPLBACKEND=Agg
+RUN find /app/notebooks -name "*.ipynb" -exec jupyter nbconvert --execute --inplace --to notebook --allow-errors --ExecutePreprocessor.timeout=120 {} \; && \
+    rm -rf /root/.cache/matplotlib /root/.matplotlib/fontlist-*.json
+
 # Copy startup script
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
