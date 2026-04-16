@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapter 2: Communication & Networks - Interactive Demos</title>
+<title>第二章：通信与网络 (Chapter 2: Communication & Networks) - 互动演示</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   min-height: 100vh; color: #e0e0e0;
 }
@@ -105,59 +105,29 @@ canvas {
 .log-area .log-error { color: #e74c3c; }
 .log-area .log-data { color: #bb86fc; }
 
-/* Info box */
+/* Info box - concept explanation */
 .info-box {
   background: rgba(102,126,234,0.1); border-left: 4px solid #667eea;
   padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 15px 0;
-  font-size: 14px; line-height: 1.7;
+  font-size: 14px; line-height: 1.8;
 }
 .info-box strong { color: #a0a0ff; }
+
+/* Guide box - green border */
+.guide-box {
+  background: rgba(46,204,113,0.08); border-left: 4px solid #2ecc71;
+  padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 15px 0;
+  font-size: 14px; line-height: 1.8;
+}
+.guide-box strong { color: #2ecc71; }
+
+/* Exam tip */
 .exam-tip {
   background: rgba(231,76,60,0.1); border-left: 4px solid #e74c3c;
   padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 15px 0;
-  font-size: 14px;
+  font-size: 14px; line-height: 1.8;
 }
 .exam-tip strong { color: #e74c3c; }
-
-/* Topology interactive */
-.topo-container { position: relative; }
-.node {
-  position: absolute; width: 60px; height: 60px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: bold; cursor: pointer;
-  transition: all 0.3s; text-align: center; line-height: 1.2;
-  border: 3px solid rgba(255,255,255,0.3);
-}
-.node:hover { transform: scale(1.15); z-index: 10; }
-.node.active { box-shadow: 0 0 20px rgba(102,126,234,0.8); }
-
-/* Speed test */
-.speed-gauge {
-  width: 200px; height: 200px; border-radius: 50%;
-  background: conic-gradient(#667eea var(--speed, 0%), #333 0%);
-  display: flex; align-items: center; justify-content: center;
-  margin: 20px auto; position: relative;
-}
-.speed-gauge::before {
-  content: ''; width: 160px; height: 160px; border-radius: 50%;
-  background: #1a1a2e; position: absolute;
-}
-.speed-gauge .speed-val {
-  position: relative; z-index: 1; text-align: center;
-}
-.speed-gauge .speed-num { font-size: 36px; font-weight: bold; color: #fff; }
-.speed-gauge .speed-unit { font-size: 14px; color: #8888aa; }
-
-/* Slider */
-input[type="range"] {
-  -webkit-appearance: none; width: 200px; height: 6px;
-  background: #444; border-radius: 3px; outline: none;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 18px; height: 18px;
-  background: #667eea; border-radius: 50%; cursor: pointer;
-}
-label { color: #aaa; font-size: 13px; }
 
 /* Table */
 .demo-table {
@@ -168,17 +138,6 @@ label { color: #aaa; font-size: 13px; }
   text-align: left; font-size: 13px;
 }
 .demo-table th { background: rgba(102,126,234,0.2); color: #fff; }
-
-/* Packet visual */
-.packet {
-  display: inline-block; padding: 4px 10px; border-radius: 4px;
-  font-size: 12px; font-weight: bold; margin: 2px;
-  animation: packetPulse 1s ease-in-out infinite;
-}
-@keyframes packetPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
 
 /* Chat */
 .chat-window {
@@ -219,12 +178,23 @@ label { color: #aaa; font-size: 13px; }
   box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 .proto-layer .layer-name { font-weight: bold; font-size: 15px; }
-.proto-layer .layer-detail { font-size: 12px; opacity: 0.8; }
+.proto-layer .layer-detail { font-size: 12px; opacity: 0.8; margin-top: 2px; }
 .proto-layer .layer-data {
   font-family: monospace; font-size: 12px;
   background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px;
   max-width: 400px; word-break: break-all;
 }
+
+/* Slider */
+input[type="range"] {
+  -webkit-appearance: none; width: 200px; height: 6px;
+  background: #444; border-radius: 3px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px;
+  background: #667eea; border-radius: 50%; cursor: pointer;
+}
+label { color: #aaa; font-size: 13px; }
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -236,57 +206,76 @@ label { color: #aaa; font-size: 13px; }
 <body>
 
 <div class="top-bar">
-  <a href="/index.html">&#8592; Back to Index</a>
-  <h1>Chapter 2: Communication & Networks - Interactive Demos</h1>
+  <a href="/index.html">&#8592; 返回目录 (Back)</a>
+  <h1>第二章：通信与网络 (Chapter 2: Communication & Networks) - 互动演示</h1>
 </div>
 
 <div class="container">
 
 <div class="demo-nav" id="demoNav">
-  <button class="active" onclick="showDemo('packet')">1. Packet Switching</button>
-  <button onclick="showDemo('dns')">2. DNS Resolution</button>
-  <button onclick="showDemo('topology')">3. Network Topologies</button>
-  <button onclick="showDemo('protocol')">4. TCP/IP Layers</button>
-  <button onclick="showDemo('chat')">5. Client-Server Demo</button>
-  <button onclick="showDemo('ip')">6. IP Address</button>
-  <button onclick="showDemo('bandwidth')">7. Bandwidth Calculator</button>
-  <button onclick="showDemo('csma')">8. CSMA/CD</button>
+  <button class="active" onclick="showDemo('packet')">1. 数据包交换</button>
+  <button onclick="showDemo('dns')">2. DNS域名解析</button>
+  <button onclick="showDemo('topology')">3. 网络拓扑</button>
+  <button onclick="showDemo('protocol')">4. TCP/IP协议栈</button>
+  <button onclick="showDemo('chat')">5. 客户端-服务器</button>
+  <button onclick="showDemo('ip')">6. IP地址分析</button>
+  <button onclick="showDemo('bandwidth')">7. 带宽计算器</button>
+  <button onclick="showDemo('csma')">8. CSMA/CD冲突检测</button>
 </div>
 
 <!-- ============================================================ -->
-<!-- DEMO 1: PACKET SWITCHING ANIMATION -->
+<!-- DEMO 1: PACKET SWITCHING -->
 <!-- ============================================================ -->
 <div class="demo-section active" id="demo-packet">
-  <h2>&#128230; Demo 1: Packet Switching vs Circuit Switching</h2>
-  <p class="subtitle">Visualize how data is split into packets and routed through the network / 可视化数据如何被拆分成数据包并通过网络路由</p>
+  <h2>&#128230; 演示1：数据包交换 (Packet Switching)</h2>
+  <p class="subtitle">可视化数据如何被拆分成数据包，经过不同路由到达目的地后重新组装</p>
 
+  <h3>&#128214; 概念讲解</h3>
   <div class="info-box">
-    <strong>What is Packet Switching?</strong><br>
-    Data is broken into small <strong>packets</strong>, each with a header containing source/destination address and sequence number.
-    Packets travel <strong>independently</strong> through the network and may take <strong>different routes</strong>.
-    They are <strong>reassembled</strong> at the destination.
+    <strong>生活类比：</strong>就像寄一个大包裹，快递公司把它拆成多个小包裹，每个走不同路线，到目的地再组装起来。<br><br>
+    <strong>什么是数据包交换 (Packet Switching)？</strong><br>
+    &#8226; 数据被拆分成多个小的<strong>数据包 (Packets)</strong><br>
+    &#8226; 每个数据包都有<strong>包头 (Header)</strong>，包含：源地址、目的地址、序列号<br>
+    &#8226; 数据包在网络中<strong>独立传输</strong>，可能走<strong>不同路径</strong><br>
+    &#8226; 到达目的地后，按序列号<strong>重新组装 (Reassemble)</strong>成原始数据<br>
+    &#8226; 与电路交换 (Circuit Switching) 相比：更高效利用带宽、有容错能力，但可能有延迟抖动
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 在下方输入框中输入一条消息（默认已有示例消息）<br>
+    2. 点击「发送消息」按钮，观察消息被拆成多个彩色数据包<br>
+    3. 观察每个数据包走不同路径到达目的地<br>
+    4. 查看下方的数据包表格，了解每个包的状态<br>
+    5. 拖动「速度」滑块可以调节动画速度
   </div>
 
   <div class="controls">
-    <button class="btn-primary" onclick="startPacketDemo()">&#9654; Send Message</button>
-    <button class="btn-danger" onclick="resetPacketDemo()">&#8635; Reset</button>
-    <label>Message: </label>
+    <button class="btn-primary" onclick="startPacketDemo()">&#9654; 发送消息</button>
+    <button class="btn-danger" onclick="resetPacketDemo()">&#8635; 重置</button>
+    <label>消息内容：</label>
     <input type="text" id="packetMsg" value="Hello from Beijing!" style="padding:6px 12px;border-radius:6px;border:1px solid #444;background:rgba(255,255,255,0.05);color:#fff;width:200px;">
-    <label>Speed: </label>
+    <label>速度：</label>
     <input type="range" id="packetSpeed" min="1" max="10" value="5" style="width:100px;">
   </div>
 
   <canvas id="packetCanvas" width="1050" height="420"></canvas>
 
-  <h3>Packet Table / 数据包表</h3>
+  <h3>数据包表 (Packet Table)</h3>
   <div id="packetTable"></div>
 
   <div id="packetLog" class="log-area" style="margin-top:15px;">
-    <div class="log-line log-info">&#128172; Enter a message and click "Send Message" to begin...</div>
+    <div class="log-line log-info">&#128172; 请输入消息并点击「发送消息」开始演示...</div>
   </div>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> Be ready to explain: (1) Why packets may arrive out of order (2) Role of headers (3) Advantages over circuit switching (better use of bandwidth, fault tolerance) (4) Disadvantages (overhead, jitter for real-time)
+    <strong>考试重点：</strong><br>
+    &#8226; 解释为什么数据包可能<strong>乱序到达</strong> (arrive out of order) -- 因为走了不同路径<br>
+    &#8226; 包头 (Header) 的作用：包含源/目的地址、序列号，用于路由和重组<br>
+    &#8226; 数据包交换的<strong>优点</strong>：更好地利用带宽 (bandwidth)、容错性好 (fault tolerance)<br>
+    &#8226; 数据包交换的<strong>缺点</strong>：有额外开销 (overhead)、实时通信可能有延迟抖动 (jitter)
   </div>
 </div>
 
@@ -294,30 +283,48 @@ label { color: #aaa; font-size: 13px; }
 <!-- DEMO 2: DNS RESOLUTION -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-dns">
-  <h2>&#128270; Demo 2: DNS Resolution</h2>
-  <p class="subtitle">Watch how a domain name gets resolved to an IP address step by step / 观察域名如何一步步被解析为IP地址</p>
+  <h2>&#128270; 演示2：DNS域名解析 (DNS Resolution)</h2>
+  <p class="subtitle">观察域名如何一步步被解析为IP地址</p>
 
+  <h3>&#128214; 概念讲解</h3>
   <div class="info-box">
-    <strong>DNS = Domain Name System</strong> is like the Internet's phone book.<br>
-    It translates human-readable domain names (e.g. <code>www.baidu.com</code>) into IP addresses (e.g. <code>110.242.68.66</code>).
+    <strong>生活类比：</strong>就像查电话簿，你知道朋友的名字（域名），需要查出他的电话号码（IP地址）。<br><br>
+    <strong>什么是DNS (Domain Name System)？</strong><br>
+    &#8226; DNS = 域名系统，相当于互联网的"电话簿"<br>
+    &#8226; 把人类能读懂的<strong>域名</strong>（如 <code>www.baidu.com</code>）转换成机器使用的<strong>IP地址</strong>（如 <code>110.242.68.66</code>）<br>
+    &#8226; 解析过程经过多个服务器：浏览器缓存 -> 本地DNS -> 根DNS -> 顶级域DNS -> 权威DNS<br>
+    &#8226; 分为<strong>迭代查询 (Iterative)</strong> 和 <strong>递归查询 (Recursive)</strong>
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 在输入框中输入一个域名（默认是 www.cambridge.org）<br>
+    2. 点击「开始解析」按钮<br>
+    3. 观察画布上的箭头动画，展示DNS查询的每一步<br>
+    4. 查看下方日志区域的详细解析过程
   </div>
 
   <div class="controls">
-    <label>Domain: </label>
+    <label>域名 (Domain)：</label>
     <input type="text" id="dnsInput" value="www.cambridge.org" style="padding:6px 12px;border-radius:6px;border:1px solid #444;background:rgba(255,255,255,0.05);color:#fff;width:220px;"
            onkeydown="if(event.key==='Enter')startDNS()">
-    <button class="btn-primary" onclick="startDNS()">&#128269; Resolve</button>
-    <button class="btn-danger" onclick="resetDNS()">&#8635; Reset</button>
+    <button class="btn-primary" onclick="startDNS()">&#128269; 开始解析</button>
+    <button class="btn-danger" onclick="resetDNS()">&#8635; 重置</button>
   </div>
 
   <canvas id="dnsCanvas" width="1050" height="500"></canvas>
 
   <div id="dnsLog" class="log-area">
-    <div class="log-line log-info">&#128172; Enter a domain name and click "Resolve" to see the DNS resolution process...</div>
+    <div class="log-line log-info">&#128172; 请输入域名并点击「开始解析」查看DNS解析过程...</div>
   </div>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> Know the DNS hierarchy: Browser Cache &#8594; Local DNS Server &#8594; Root DNS &#8594; TLD DNS (.com, .org) &#8594; Authoritative DNS. Also know iterative vs recursive queries.
+    <strong>考试重点：</strong><br>
+    &#8226; DNS层级结构：浏览器缓存 (Browser Cache) -> 本地DNS (Local DNS) -> 根DNS (Root DNS) -> 顶级域DNS (TLD DNS: .com, .org) -> 权威DNS (Authoritative DNS)<br>
+    &#8226; 迭代查询 (Iterative Query) vs 递归查询 (Recursive Query) 的区别<br>
+    &#8226; DNS缓存 (Cache) 的作用：加快解析速度，减少网络流量
   </div>
 </div>
 
@@ -325,14 +332,32 @@ label { color: #aaa; font-size: 13px; }
 <!-- DEMO 3: NETWORK TOPOLOGIES -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-topology">
-  <h2>&#128423; Demo 3: Network Topologies</h2>
-  <p class="subtitle">Compare Star, Bus, and Mesh topologies interactively / 交互对比星形、总线和网状拓扑</p>
+  <h2>&#128423; 演示3：网络拓扑结构 (Network Topologies)</h2>
+  <p class="subtitle">交互对比星形、总线形和网状形拓扑结构</p>
+
+  <h3>&#128214; 概念讲解</h3>
+  <div class="info-box">
+    <strong>什么是网络拓扑 (Network Topology)？</strong><br>
+    &#8226; 网络拓扑 = 网络中设备的<strong>连接方式和布局</strong><br>
+    &#8226; <strong>星形拓扑 (Star)</strong>：所有设备连接到一个中央交换机，像星星一样辐射<br>
+    &#8226; <strong>总线形拓扑 (Bus)</strong>：所有设备共享一条主干电缆，像公交车站牌<br>
+    &#8226; <strong>网状形拓扑 (Mesh)</strong>：每台设备都与其他设备直接相连，像蜘蛛网<br>
+    &#8226; 不同拓扑结构在<strong>成本、可靠性、扩展性</strong>方面各有优缺点
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 点击上方的拓扑类型按钮（星形/总线形/网状形）切换查看<br>
+    2. 点击画布中的任意一台电脑 (PC) 节点，可以模拟数据发送动画<br>
+    3. 对比下方的拓扑对比表格
+  </div>
 
   <div class="controls">
-    <button class="btn-outline active" onclick="showTopo('star')">&#11088; Star</button>
-    <button class="btn-outline" onclick="showTopo('bus')">&#128652; Bus</button>
-    <button class="btn-outline" onclick="showTopo('mesh')">&#128279; Mesh</button>
-    <span style="margin-left:20px;color:#aaa;">Click a node to simulate sending data / 点击节点模拟发送数据</span>
+    <button class="btn-outline active" onclick="showTopo('star')">&#11088; 星形 (Star)</button>
+    <button class="btn-outline" onclick="showTopo('bus')">&#128652; 总线形 (Bus)</button>
+    <button class="btn-outline" onclick="showTopo('mesh')">&#128279; 网状形 (Mesh)</button>
+    <span style="margin-left:20px;color:#aaa;">点击画布中的节点模拟数据发送</span>
   </div>
 
   <canvas id="topoCanvas" width="1050" height="450"></canvas>
@@ -340,108 +365,206 @@ label { color: #aaa; font-size: 13px; }
   <div id="topoInfo" class="info-box"></div>
 
   <div id="topoLog" class="log-area">
-    <div class="log-line log-info">&#128172; Select a topology and click on a node to send data...</div>
+    <div class="log-line log-info">&#128172; 选择一种拓扑结构，然后点击节点发送数据...</div>
   </div>
 
-  <h3>Topology Comparison / 拓扑对比</h3>
+  <h3>拓扑对比表 (Topology Comparison)</h3>
   <table class="demo-table">
-    <tr><th>Feature</th><th>&#11088; Star</th><th>&#128652; Bus</th><th>&#128279; Mesh</th></tr>
-    <tr><td>Central Device</td><td>Switch/Hub</td><td>None (backbone cable)</td><td>None</td></tr>
-    <tr><td>Fault Tolerance</td><td>One node fails = OK<br>Switch fails = all down</td><td>Cable break = all down</td><td>Excellent - multiple paths</td></tr>
-    <tr><td>Cost</td><td>Medium</td><td>Low</td><td>High (many cables)</td></tr>
-    <tr><td>Performance</td><td>Good (no collisions)</td><td>Poor (collisions)</td><td>Excellent</td></tr>
-    <tr><td>Scalability</td><td>Easy to add nodes</td><td>Limited</td><td>Complex</td></tr>
+    <tr>
+      <th>特性 (Feature)</th>
+      <th>&#11088; 星形 (Star)</th>
+      <th>&#128652; 总线形 (Bus)</th>
+      <th>&#128279; 网状形 (Mesh)</th>
+    </tr>
+    <tr>
+      <td>中心设备 (Central Device)</td>
+      <td>交换机/集线器 (Switch/Hub)</td>
+      <td>无（共享主干电缆）</td>
+      <td>无</td>
+    </tr>
+    <tr>
+      <td>容错性 (Fault Tolerance)</td>
+      <td>单个节点故障不影响；<br>交换机故障=全部断网</td>
+      <td>电缆断裂=全部断网</td>
+      <td>极好 -- 有多条备用路径</td>
+    </tr>
+    <tr>
+      <td>成本 (Cost)</td>
+      <td>中等</td>
+      <td>低（电缆少）</td>
+      <td>高（需要大量电缆）</td>
+    </tr>
+    <tr>
+      <td>性能 (Performance)</td>
+      <td>好（无冲突）</td>
+      <td>差（容易冲突）</td>
+      <td>极好</td>
+    </tr>
+    <tr>
+      <td>可扩展性 (Scalability)</td>
+      <td>容易添加新设备</td>
+      <td>有限</td>
+      <td>复杂且昂贵</td>
+    </tr>
   </table>
+
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
+  <div class="exam-tip">
+    <strong>考试重点：</strong><br>
+    &#8226; 能够画出每种拓扑结构的示意图<br>
+    &#8226; 比较各拓扑的优缺点 (advantages/disadvantages)<br>
+    &#8226; 星形拓扑最常见，中央设备故障是单点故障 (single point of failure)<br>
+    &#8226; 网状拓扑最可靠但成本最高
+  </div>
 </div>
 
 <!-- ============================================================ -->
 <!-- DEMO 4: TCP/IP PROTOCOL LAYERS -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-protocol">
-  <h2>&#128218; Demo 4: TCP/IP Protocol Stack</h2>
-  <p class="subtitle">See how data gets encapsulated as it passes through each layer / 观察数据经过每一层时如何被封装</p>
+  <h2>&#128218; 演示4：TCP/IP 协议栈 (TCP/IP Protocol Stack)</h2>
+  <p class="subtitle">观察数据经过每一层时如何被逐层封装</p>
+
+  <h3>&#128214; 概念讲解</h3>
+  <div class="info-box">
+    <strong>生活类比：</strong>就像寄信 -- 信纸上写的内容=应用层数据，装进信封=传输层，写上收发地址=网络层，装进邮袋=数据链路层，邮车运送=物理层。<br><br>
+    <strong>TCP/IP协议栈有5层：</strong><br>
+    &#8226; <strong>应用层 (Application Layer)</strong>：产生数据（HTTP、FTP、SMTP等协议）<br>
+    &#8226; <strong>传输层 (Transport Layer)</strong>：添加端口号和序列号（TCP/UDP协议）<br>
+    &#8226; <strong>网络层 (Network Layer)</strong>：添加IP地址（IP协议，负责路由）<br>
+    &#8226; <strong>数据链路层 (Data Link Layer)</strong>：添加MAC地址和错误校验（以太网协议）<br>
+    &#8226; <strong>物理层 (Physical Layer)</strong>：转换成电信号/光信号/无线电波
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 在输入框中输入一条消息（默认是 "Hello!"）<br>
+    2. 点击「逐层封装」按钮<br>
+    3. 观察数据从上到下经过每一层，每层添加自己的头部信息<br>
+    4. 高亮的层就是当前正在处理的层
+  </div>
 
   <div class="controls">
-    <label>Message to send: </label>
+    <label>发送消息：</label>
     <input type="text" id="protoMsg" value="Hello!" style="padding:6px 12px;border-radius:6px;border:1px solid #444;background:rgba(255,255,255,0.05);color:#fff;width:180px;">
-    <button class="btn-primary" onclick="startProtocol()">&#128640; Send through layers</button>
-    <button class="btn-danger" onclick="resetProtocol()">&#8635; Reset</button>
+    <button class="btn-primary" onclick="startProtocol()">&#128640; 逐层封装</button>
+    <button class="btn-danger" onclick="resetProtocol()">&#8635; 重置</button>
   </div>
 
   <div class="protocol-stack" id="protoStack">
     <div class="proto-layer" style="background:rgba(255,107,107,0.3);" data-layer="5">
-      <div><div class="layer-name">5. Application Layer (HTTP)</div><div class="layer-detail">Creates the HTTP request with your message</div></div>
+      <div>
+        <div class="layer-name">5. 应用层 (Application Layer) -- HTTP</div>
+        <div class="layer-detail">产生HTTP请求，包含用户的消息数据</div>
+      </div>
       <div class="layer-data" id="proto-5"></div>
     </div>
     <div class="proto-layer" style="background:rgba(255,160,122,0.3);" data-layer="4">
-      <div><div class="layer-name">4. Transport Layer (TCP)</div><div class="layer-detail">Adds source/destination port numbers, sequence number</div></div>
+      <div>
+        <div class="layer-name">4. 传输层 (Transport Layer) -- TCP</div>
+        <div class="layer-detail">添加源/目的端口号、序列号 | PDU名称：段 (Segment)</div>
+      </div>
       <div class="layer-data" id="proto-4"></div>
     </div>
     <div class="proto-layer" style="background:rgba(255,215,0,0.2);" data-layer="3">
-      <div><div class="layer-name">3. Network Layer (IP)</div><div class="layer-detail">Adds source/destination IP addresses</div></div>
+      <div>
+        <div class="layer-name">3. 网络层 (Network Layer) -- IP</div>
+        <div class="layer-detail">添加源/目的IP地址 | PDU名称：包 (Packet)</div>
+      </div>
       <div class="layer-data" id="proto-3"></div>
     </div>
     <div class="proto-layer" style="background:rgba(152,251,152,0.2);" data-layer="2">
-      <div><div class="layer-name">2. Data Link Layer (Ethernet)</div><div class="layer-detail">Adds MAC addresses and error checking (CRC)</div></div>
+      <div>
+        <div class="layer-name">2. 数据链路层 (Data Link Layer) -- Ethernet</div>
+        <div class="layer-detail">添加MAC地址和CRC错误校验 | PDU名称：帧 (Frame)</div>
+      </div>
       <div class="layer-data" id="proto-2"></div>
     </div>
     <div class="proto-layer" style="background:rgba(135,206,235,0.2);" data-layer="1">
-      <div><div class="layer-name">1. Physical Layer</div><div class="layer-detail">Converts to electrical signals / light pulses / radio waves</div></div>
+      <div>
+        <div class="layer-name">1. 物理层 (Physical Layer)</div>
+        <div class="layer-detail">转换为电信号/光信号/无线电波 | PDU名称：比特 (Bits)</div>
+      </div>
       <div class="layer-data" id="proto-1"></div>
     </div>
   </div>
 
   <div id="protoLog" class="log-area">
-    <div class="log-line log-info">&#128172; Enter a message and click "Send through layers" to see encapsulation...</div>
+    <div class="log-line log-info">&#128172; 请输入消息并点击「逐层封装」查看数据封装过程...</div>
   </div>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> Remember: Each layer adds its own header (encapsulation). PDU names: Data &#8594; Segment &#8594; Packet &#8594; Frame &#8594; Bits. At the receiving end, headers are stripped off (de-encapsulation).
+    <strong>考试重点：</strong><br>
+    &#8226; 每层添加自己的头部信息，这个过程叫<strong>封装 (Encapsulation)</strong><br>
+    &#8226; PDU名称要记住：数据 (Data) -> 段 (Segment) -> 包 (Packet) -> 帧 (Frame) -> 比特 (Bits)<br>
+    &#8226; 接收端反向操作，逐层剥离头部，叫<strong>解封装 (De-encapsulation)</strong><br>
+    &#8226; 每层只与对端的同一层通信（逻辑上的对等通信）
   </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- DEMO 5: CLIENT-SERVER CHAT -->
+<!-- DEMO 5: CLIENT-SERVER -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-chat">
-  <h2>&#128172; Demo 5: Client-Server Model Simulation</h2>
-  <p class="subtitle">Experience how clients communicate through a central server / 体验客户端如何通过中央服务器通信</p>
+  <h2>&#128172; 演示5：客户端-服务器模型 (Client-Server Model)</h2>
+  <p class="subtitle">体验客户端如何通过中央服务器通信，对比点对点模式</p>
+
+  <h3>&#128214; 概念讲解</h3>
+  <div class="info-box">
+    <strong>两种网络模型：</strong><br>
+    &#8226; <strong>客户端-服务器模式 (Client-Server)</strong>：所有消息都经过中央服务器。服务器统一管理、存储和转发消息。服务器故障=所有通信中断。例：网站、电子邮件、网络游戏。<br>
+    &#8226; <strong>点对点模式 (Peer-to-Peer / P2P)</strong>：客户端之间直接通信。没有中心故障点，但管理困难、安全性较低。例：BitTorrent、区块链。
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 点击上方按钮切换「客户端-服务器模式」或「点对点模式」<br>
+    2. 在下方选择一个客户端（A/B/C），输入消息并发送<br>
+    3. 观察消息在不同模式下的传递路径差异<br>
+    4. 查看日志区域了解详细流程
+  </div>
 
   <div class="controls">
-    <button class="btn-outline active" onclick="switchChatMode('cs')">Client-Server Mode</button>
-    <button class="btn-outline" onclick="switchChatMode('p2p')">P2P Mode</button>
-    <button class="btn-danger" onclick="resetChat()">&#8635; Reset</button>
+    <button class="btn-outline active" onclick="switchChatMode('cs')">&#128421; 客户端-服务器模式</button>
+    <button class="btn-outline" onclick="switchChatMode('p2p')">&#128279; 点对点模式 (P2P)</button>
+    <button class="btn-danger" onclick="resetChat()">&#8635; 重置</button>
   </div>
 
   <div style="display:flex;gap:20px;flex-wrap:wrap;">
     <div style="flex:1;min-width:300px;">
-      <h3 id="chatModeTitle">Client-Server Architecture</h3>
+      <h3 id="chatModeTitle">客户端-服务器架构 (Client-Server)</h3>
       <canvas id="chatArchCanvas" width="500" height="200"></canvas>
     </div>
     <div style="flex:1;min-width:300px;">
-      <h3>Chat Window</h3>
+      <h3>聊天窗口 (Chat Window)</h3>
       <div class="chat-window" id="chatWindow"></div>
       <div class="chat-input">
         <select id="chatSender" style="padding:8px;border-radius:8px;background:#2a2a4a;color:#fff;border:1px solid #444;">
-          <option value="Client A">Client A</option>
-          <option value="Client B">Client B</option>
-          <option value="Client C">Client C</option>
+          <option value="客户端A">客户端A (Client A)</option>
+          <option value="客户端B">客户端B (Client B)</option>
+          <option value="客户端C">客户端C (Client C)</option>
         </select>
-        <input type="text" id="chatInput" placeholder="Type a message... / 输入消息..."
+        <input type="text" id="chatInput" placeholder="输入消息..."
                onkeydown="if(event.key==='Enter')sendChatMsg()">
-        <button class="btn-primary" onclick="sendChatMsg()">Send</button>
+        <button class="btn-primary" onclick="sendChatMsg()">发送</button>
       </div>
     </div>
   </div>
 
   <div id="chatLog" class="log-area" style="margin-top:15px;">
-    <div class="log-line log-info">&#128172; Select a client and send a message to see how it flows...</div>
+    <div class="log-line log-info">&#128172; 选择一个客户端并发送消息，观察通信流程...</div>
   </div>
 
-  <div class="info-box">
-    <strong>Client-Server vs P2P:</strong><br>
-    <strong>Client-Server:</strong> All messages go through the central server. Server manages, stores, and forwards messages. If server fails, no communication.<br>
-    <strong>P2P:</strong> Clients communicate directly with each other. No central point of failure, but harder to manage and less secure.
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
+  <div class="exam-tip">
+    <strong>考试重点：</strong><br>
+    &#8226; 客户端-服务器：服务器是<strong>单点故障 (Single Point of Failure)</strong>，但<strong>易于管理和安全</strong><br>
+    &#8226; P2P：<strong>去中心化 (Decentralised)</strong>，没有单点故障，但<strong>安全性低、管理困难</strong><br>
+    &#8226; 能够举出每种模式的实际应用例子<br>
+    &#8226; 服务器通常比客户端更强大（更多CPU/内存/存储）
   </div>
 </div>
 
@@ -449,40 +572,74 @@ label { color: #aaa; font-size: 13px; }
 <!-- DEMO 6: IP ADDRESS -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-ip">
-  <h2>&#127760; Demo 6: IP Addresses & Subnetting</h2>
-  <p class="subtitle">Understand IPv4, IPv6, public vs private addresses / 理解IPv4、IPv6、公有与私有地址</p>
+  <h2>&#127760; 演示6：IP地址分析器 (IP Address Analyzer)</h2>
+  <p class="subtitle">理解IPv4地址分类、公有/私有地址、二进制表示</p>
+
+  <h3>&#128214; 概念讲解</h3>
+  <div class="info-box">
+    <strong>什么是IP地址？</strong><br>
+    &#8226; IP地址 = 网络中设备的<strong>唯一标识</strong>，就像家庭住址<br>
+    &#8226; <strong>IPv4</strong>：32位，用4个十进制数表示（如 192.168.1.1），共约43亿个地址<br>
+    &#8226; <strong>IPv6</strong>：128位，用8组十六进制数表示，地址空间巨大<br>
+    &#8226; <strong>公有IP (Public)</strong>：在互联网上可路由，全球唯一<br>
+    &#8226; <strong>私有IP (Private)</strong>：仅在局域网内使用，需要NAT转换才能上网
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 在输入框中输入一个IPv4地址（或点击「随机IP」按钮）<br>
+    2. 系统会自动分析：地址分类、是否为私有地址、二进制表示<br>
+    3. 对照下方的分类表和私有地址范围表学习
+  </div>
 
   <div class="controls">
-    <label>Enter an IP: </label>
+    <label>输入IP地址：</label>
     <input type="text" id="ipInput" value="192.168.1.100" style="padding:6px 12px;border-radius:6px;border:1px solid #444;background:rgba(255,255,255,0.05);color:#fff;width:180px;"
            oninput="analyzeIP()">
-    <button class="btn-primary" onclick="analyzeIP()">Analyze</button>
-    <button class="btn-warning" onclick="randomIP()">Random IP</button>
+    <button class="btn-primary" onclick="analyzeIP()">分析</button>
+    <button class="btn-warning" onclick="randomIP()">随机IP</button>
   </div>
 
   <div id="ipResult" style="margin:15px 0;"></div>
 
-  <h3>Binary Representation / 二进制表示</h3>
+  <h3>二进制表示 (Binary Representation)</h3>
   <div id="ipBinary" style="font-family:monospace;font-size:16px;margin:10px 0;"></div>
 
-  <h3>IPv4 Address Classes / IPv4 地址分类</h3>
+  <h3>IPv4 地址分类 (Address Classes)</h3>
   <table class="demo-table">
-    <tr><th>Class</th><th>Range</th><th>Default Mask</th><th>Use</th><th>Networks</th><th>Hosts/Network</th></tr>
-    <tr><td style="color:#FF6B6B;font-weight:bold;">A</td><td>1.0.0.0 - 126.255.255.255</td><td>255.0.0.0</td><td>Large orgs</td><td>126</td><td>~16 million</td></tr>
-    <tr><td style="color:#FFD700;font-weight:bold;">B</td><td>128.0.0.0 - 191.255.255.255</td><td>255.255.0.0</td><td>Medium orgs</td><td>16,384</td><td>~65,000</td></tr>
-    <tr><td style="color:#2ecc71;font-weight:bold;">C</td><td>192.0.0.0 - 223.255.255.255</td><td>255.255.255.0</td><td>Small orgs</td><td>~2 million</td><td>254</td></tr>
+    <tr>
+      <th>类别 (Class)</th>
+      <th>范围 (Range)</th>
+      <th>默认掩码 (Default Mask)</th>
+      <th>用途 (Use)</th>
+      <th>网络数 (Networks)</th>
+      <th>主机数/网络 (Hosts)</th>
+    </tr>
+    <tr><td style="color:#FF6B6B;font-weight:bold;">A</td><td>1.0.0.0 - 126.255.255.255</td><td>255.0.0.0</td><td>大型组织</td><td>126</td><td>约1600万</td></tr>
+    <tr><td style="color:#FFD700;font-weight:bold;">B</td><td>128.0.0.0 - 191.255.255.255</td><td>255.255.0.0</td><td>中型组织</td><td>16,384</td><td>约65,000</td></tr>
+    <tr><td style="color:#2ecc71;font-weight:bold;">C</td><td>192.0.0.0 - 223.255.255.255</td><td>255.255.255.0</td><td>小型组织</td><td>约200万</td><td>254</td></tr>
   </table>
 
-  <h3>Private IP Ranges / 私有IP地址范围</h3>
+  <h3>私有IP地址范围 (Private IP Ranges)</h3>
   <table class="demo-table">
-    <tr><th>Class</th><th>Private Range</th><th>Common Use</th></tr>
-    <tr><td>A</td><td>10.0.0.0 - 10.255.255.255</td><td>Large enterprise networks</td></tr>
-    <tr><td>B</td><td>172.16.0.0 - 172.31.255.255</td><td>Medium networks</td></tr>
-    <tr><td>C</td><td>192.168.0.0 - 192.168.255.255</td><td>Home / small office (most common!)</td></tr>
+    <tr>
+      <th>类别 (Class)</th>
+      <th>私有范围 (Private Range)</th>
+      <th>常见用途 (Common Use)</th>
+    </tr>
+    <tr><td>A</td><td>10.0.0.0 - 10.255.255.255</td><td>大型企业内部网络</td></tr>
+    <tr><td>B</td><td>172.16.0.0 - 172.31.255.255</td><td>中型网络</td></tr>
+    <tr><td>C</td><td>192.168.0.0 - 192.168.255.255</td><td>家庭/小型办公网络（最常见！）</td></tr>
   </table>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> Know: (1) IPv4 = 32 bits, IPv6 = 128 bits (2) Private IPs cannot be routed on the Internet (3) NAT translates private to public (4) Why IPv6 was needed (IPv4 address exhaustion)
+    <strong>考试重点：</strong><br>
+    &#8226; IPv4 = 32位 (bits)，IPv6 = 128位 (bits)<br>
+    &#8226; 私有IP不能在互联网上直接路由，需要<strong>NAT (Network Address Translation)</strong> 转换<br>
+    &#8226; IPv6 产生的原因：IPv4地址<strong>耗尽 (exhaustion)</strong><br>
+    &#8226; 能够将十进制IP转换为二进制（手动计算）
   </div>
 </div>
 
@@ -490,38 +647,57 @@ label { color: #aaa; font-size: 13px; }
 <!-- DEMO 7: BANDWIDTH CALCULATOR -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-bandwidth">
-  <h2>&#128200; Demo 7: Bandwidth & File Transfer Calculator</h2>
-  <p class="subtitle">Calculate how long it takes to transfer files at different speeds / 计算不同速度下传输文件所需时间</p>
+  <h2>&#128200; 演示7：带宽计算器 (Bandwidth Calculator)</h2>
+  <p class="subtitle">计算不同速度下传输文件所需的时间</p>
+
+  <h3>&#128214; 概念讲解</h3>
+  <div class="info-box">
+    <strong>核心公式：</strong>传输时间 = 文件大小 / 带宽<br>
+    <strong>Time = File Size / Bandwidth</strong><br><br>
+    <strong>注意单位换算！</strong><br>
+    &#8226; 文件大小通常用<strong>字节 (Bytes)</strong>表示，带宽通常用<strong>比特/秒 (bits per second)</strong>表示<br>
+    &#8226; 1 字节 (Byte) = 8 比特 (bits)，所以要乘以8<br>
+    &#8226; 十进制：1 KB = 1000 B，1 MB = 1000 KB<br>
+    &#8226; 二进制：1 KiB = 1024 B，1 MiB = 1024 KiB（考试中注意区分！）
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 在左侧设置文件大小（手动输入或点击快捷按钮）<br>
+    2. 设置带宽速度（手动输入或点击常见速度按钮）<br>
+    3. 右侧会自动计算传输时间，并显示不同速度的对比
+  </div>
 
   <div style="display:flex;gap:30px;flex-wrap:wrap;">
     <div style="flex:1;min-width:280px;">
-      <h3>File Size / 文件大小</h3>
+      <h3>文件大小 (File Size)</h3>
       <div class="controls" style="flex-direction:column;align-items:flex-start;">
         <div style="display:flex;align-items:center;gap:10px;">
           <input type="number" id="fileSize" value="700" min="1"
                  style="padding:8px;border-radius:6px;border:1px solid #444;background:rgba(255,255,255,0.05);color:#fff;width:120px;"
                  oninput="calcTransfer()">
           <select id="fileSizeUnit" style="padding:8px;border-radius:6px;background:#2a2a4a;color:#fff;border:1px solid #444;" onchange="calcTransfer()">
-            <option value="B">Bytes</option>
+            <option value="B">字节 (Bytes)</option>
             <option value="KB">KB</option>
             <option value="MB" selected>MB</option>
             <option value="GB">GB</option>
-            <option value="KiB">KiB</option>
-            <option value="MiB">MiB</option>
-            <option value="GiB">GiB</option>
+            <option value="KiB">KiB (1024)</option>
+            <option value="MiB">MiB (1024)</option>
+            <option value="GiB">GiB (1024)</option>
           </select>
         </div>
         <div style="margin-top:15px;">
-          <label>Quick Select:</label><br>
-          <button class="btn-outline" onclick="setFile(5,'MB')" style="margin:3px;font-size:12px;padding:4px 10px;">Photo (5MB)</button>
-          <button class="btn-outline" onclick="setFile(700,'MB')" style="margin:3px;font-size:12px;padding:4px 10px;">CD (700MB)</button>
+          <label>快捷选择：</label><br>
+          <button class="btn-outline" onclick="setFile(5,'MB')" style="margin:3px;font-size:12px;padding:4px 10px;">照片 (5MB)</button>
+          <button class="btn-outline" onclick="setFile(700,'MB')" style="margin:3px;font-size:12px;padding:4px 10px;">CD光盘 (700MB)</button>
           <button class="btn-outline" onclick="setFile(4.7,'GB')" style="margin:3px;font-size:12px;padding:4px 10px;">DVD (4.7GB)</button>
-          <button class="btn-outline" onclick="setFile(25,'GB')" style="margin:3px;font-size:12px;padding:4px 10px;">Blu-ray (25GB)</button>
-          <button class="btn-outline" onclick="setFile(50,'GB')" style="margin:3px;font-size:12px;padding:4px 10px;">Game (50GB)</button>
+          <button class="btn-outline" onclick="setFile(25,'GB')" style="margin:3px;font-size:12px;padding:4px 10px;">蓝光 (25GB)</button>
+          <button class="btn-outline" onclick="setFile(50,'GB')" style="margin:3px;font-size:12px;padding:4px 10px;">游戏 (50GB)</button>
         </div>
       </div>
 
-      <h3>Bandwidth / 带宽</h3>
+      <h3>带宽 (Bandwidth)</h3>
       <div class="controls" style="flex-direction:column;align-items:flex-start;">
         <div style="display:flex;align-items:center;gap:10px;">
           <input type="number" id="bandwidth" value="100" min="1"
@@ -535,28 +711,32 @@ label { color: #aaa; font-size: 13px; }
           </select>
         </div>
         <div style="margin-top:15px;">
-          <label>Common Speeds:</label><br>
-          <button class="btn-outline" onclick="setBW(56,'Kbps')" style="margin:3px;font-size:12px;padding:4px 10px;">Dial-up (56Kbps)</button>
-          <button class="btn-outline" onclick="setBW(10,'Mbps')" style="margin:3px;font-size:12px;padding:4px 10px;">Ethernet (10Mbps)</button>
-          <button class="btn-outline" onclick="setBW(100,'Mbps')" style="margin:3px;font-size:12px;padding:4px 10px;">Fast Ethernet (100Mbps)</button>
-          <button class="btn-outline" onclick="setBW(1,'Gbps')" style="margin:3px;font-size:12px;padding:4px 10px;">Gigabit (1Gbps)</button>
+          <label>常见速度：</label><br>
+          <button class="btn-outline" onclick="setBW(56,'Kbps')" style="margin:3px;font-size:12px;padding:4px 10px;">拨号上网 (56Kbps)</button>
+          <button class="btn-outline" onclick="setBW(10,'Mbps')" style="margin:3px;font-size:12px;padding:4px 10px;">以太网 (10Mbps)</button>
+          <button class="btn-outline" onclick="setBW(100,'Mbps')" style="margin:3px;font-size:12px;padding:4px 10px;">快速以太网 (100Mbps)</button>
+          <button class="btn-outline" onclick="setBW(1,'Gbps')" style="margin:3px;font-size:12px;padding:4px 10px;">千兆网 (1Gbps)</button>
           <button class="btn-outline" onclick="setBW(5,'Gbps')" style="margin:3px;font-size:12px;padding:4px 10px;">WiFi 6 (5Gbps)</button>
         </div>
       </div>
     </div>
 
     <div style="flex:1;min-width:280px;">
-      <h3>Result / 结果</h3>
+      <h3>计算结果 (Result)</h3>
       <div id="transferResult" style="font-size:20px;margin:20px 0;"></div>
       <div id="transferFormula" style="font-family:monospace;font-size:13px;color:#aaa;margin:10px 0;"></div>
 
-      <h3>Comparison / 速度对比</h3>
+      <h3>速度对比 (Speed Comparison)</h3>
       <div id="speedComparison"></div>
     </div>
   </div>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> Formula: <strong>Time = File Size / Bandwidth</strong>. Watch out for units! File size is usually in <strong>bytes</strong> but bandwidth is in <strong>bits</strong> per second. Multiply bytes by 8 to get bits. Also know: 1 KB = 1000 bytes, 1 KiB = 1024 bytes.
+    <strong>考试重点：</strong><br>
+    &#8226; 公式：<strong>传输时间 = 文件大小(bits) / 带宽(bps)</strong> -- Time = File Size / Bandwidth<br>
+    &#8226; <strong>单位陷阱！</strong>文件大小通常是<strong>字节 (Bytes)</strong>，带宽是<strong>比特/秒 (bits/s)</strong>，需要乘以8换算<br>
+    &#8226; 1 KB = 1000 B (十进制)，1 KiB = 1024 B (二进制) -- 考试中注意区分！
   </div>
 </div>
 
@@ -564,31 +744,48 @@ label { color: #aaa; font-size: 13px; }
 <!-- DEMO 8: CSMA/CD -->
 <!-- ============================================================ -->
 <div class="demo-section" id="demo-csma">
-  <h2>&#128165; Demo 8: CSMA/CD - Collision Detection</h2>
-  <p class="subtitle">Watch how Ethernet handles collisions on a shared medium / 观察以太网如何处理共享介质上的冲突</p>
+  <h2>&#128165; 演示8：CSMA/CD 冲突检测 (Collision Detection)</h2>
+  <p class="subtitle">观察以太网如何检测和处理共享介质上的数据冲突</p>
 
+  <h3>&#128214; 概念讲解</h3>
   <div class="info-box">
-    <strong>CSMA/CD = Carrier Sense Multiple Access with Collision Detection</strong><br>
-    1. <strong>Carrier Sense:</strong> Listen before sending - is the line busy?<br>
-    2. <strong>Multiple Access:</strong> Multiple devices share the same medium<br>
-    3. <strong>Collision Detection:</strong> If two devices send at the same time, detect the collision, stop, wait a random time, then retry
+    <strong>生活类比：</strong>就像在走廊里两个人迎面走来，都要让路，等一会再走。谁等的时间短，谁先走。<br><br>
+    <strong>CSMA/CD = 载波侦听多路访问/冲突检测</strong> (Carrier Sense Multiple Access with Collision Detection)<br>
+    &#8226; <strong>载波侦听 (Carrier Sense)</strong>：发送前先"听"一下线路是否空闲<br>
+    &#8226; <strong>多路访问 (Multiple Access)</strong>：多台设备共享同一条传输介质<br>
+    &#8226; <strong>冲突检测 (Collision Detection)</strong>：如果两台设备同时发送，检测到冲突后停止，等待随机时间后重试<br><br>
+    <strong>完整步骤：</strong><br>
+    1. 监听信道 -> 2. 空闲则发送 -> 3. 忙则等待 -> 4. 检测到冲突则发送阻塞信号 (Jam Signal) -> 5. 随机退避等待 (Random Backoff) -> 6. 重新尝试
+  </div>
+
+  <h3>&#128221; 操作指南</h3>
+  <div class="guide-box">
+    <strong>如何操作：</strong><br>
+    1. 点击「PC1 发送」或「PC2 发送」查看正常数据传输<br>
+    2. 点击「同时发送（冲突！）」模拟两台电脑同时发送数据导致冲突<br>
+    3. 观察冲突发生后的处理过程：阻塞信号 -> 随机退避 -> 重新发送
   </div>
 
   <div class="controls">
-    <button class="btn-success" onclick="csmaStart(1)">PC1 Send</button>
-    <button class="btn-warning" onclick="csmaStart(2)">PC2 Send</button>
-    <button class="btn-danger" onclick="csmaBothSend()">&#128165; Both Send (Collision!)</button>
-    <button class="btn-outline" onclick="csmaReset()">&#8635; Reset</button>
+    <button class="btn-success" onclick="csmaStart(1)">&#128424; PC1 发送</button>
+    <button class="btn-warning" onclick="csmaStart(2)">&#128424; PC2 发送</button>
+    <button class="btn-danger" onclick="csmaBothSend()">&#128165; 同时发送（冲突！）</button>
+    <button class="btn-outline" onclick="csmaReset()">&#8635; 重置</button>
   </div>
 
   <canvas id="csmaCanvas" width="1050" height="300"></canvas>
 
   <div id="csmaLog" class="log-area">
-    <div class="log-line log-info">&#128172; Click a button to simulate CSMA/CD. Try "Both Send" to see a collision!</div>
+    <div class="log-line log-info">&#128172; 点击按钮开始模拟CSMA/CD，试试「同时发送」看冲突效果！</div>
   </div>
 
+  <h3>&#127919; 考试要点 (Exam Tips)</h3>
   <div class="exam-tip">
-    <strong>&#127919; Exam Tip:</strong> CSMA/CD steps: (1) Listen to channel (2) If idle, transmit (3) If busy, wait (4) If collision detected, send jam signal (5) Wait random backoff time (6) Retry. Used in <strong>wired Ethernet (802.3)</strong>. WiFi uses CSMA/<strong>CA</strong> (Collision <strong>Avoidance</strong>) instead.
+    <strong>考试重点：</strong><br>
+    &#8226; CSMA/CD步骤：监听(Listen) -> 空闲则发送(Transmit if idle) -> 冲突则停止(Stop on collision) -> 发阻塞信号(Jam signal) -> 随机退避(Random backoff) -> 重试(Retry)<br>
+    &#8226; 用于<strong>有线以太网 (Wired Ethernet, 802.3)</strong><br>
+    &#8226; WiFi使用的是 CSMA/<strong>CA</strong> (Collision <strong>Avoidance</strong> 冲突<strong>避免</strong>)，而非CD<br>
+    &#8226; 区别：CD是检测到冲突后处理，CA是<strong>提前</strong>避免冲突（先发RTS/CTS信号）
   </div>
 </div>
 
@@ -599,16 +796,80 @@ label { color: #aaa; font-size: 13px; }
 // DEMO NAV
 // ============================================================
 function showDemo(id) {
-  document.querySelectorAll('.demo-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.demo-nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.demo-section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.demo-nav button').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('demo-' + id).classList.add('active');
   event.target.classList.add('active');
+}
+
+// ============================================================
+// HELPER: LOG
+// ============================================================
+function addLog(logEl, type, msg) {
+  var time = new Date().toLocaleTimeString();
+  logEl.innerHTML += '<div class="log-line log-' + type + '">[' + time + '] ' + msg + '</div>';
+  logEl.scrollTop = logEl.scrollHeight;
 }
 
 // ============================================================
 // DEMO 1: PACKET SWITCHING
 // ============================================================
 var packetAnim = null;
+var packetNodes = [
+  {x: 80, y: 210, label: '发送方\n(Source)', color: '#2ecc71'},
+  {x: 300, y: 100, label: '路由器A\n(Router A)', color: '#3498db'},
+  {x: 300, y: 320, label: '路由器B\n(Router B)', color: '#3498db'},
+  {x: 550, y: 80, label: '路由器C\n(Router C)', color: '#e67e22'},
+  {x: 550, y: 210, label: '路由器D\n(Router D)', color: '#e67e22'},
+  {x: 550, y: 340, label: '路由器E\n(Router E)', color: '#e67e22'},
+  {x: 800, y: 100, label: '路由器F\n(Router F)', color: '#9b59b6'},
+  {x: 800, y: 320, label: '路由器G\n(Router G)', color: '#9b59b6'},
+  {x: 970, y: 210, label: '接收方\n(Dest)', color: '#e74c3c'},
+];
+var packetEdges = [[0,1],[0,2],[1,3],[1,4],[2,4],[2,5],[3,6],[4,6],[4,7],[5,7],[6,8],[7,8],[3,4],[4,5]];
+
+function drawPacketNetwork(ctx, W, H, statusText) {
+  ctx.clearRect(0, 0, W, H);
+  // Draw connections
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 2;
+  packetEdges.forEach(function(e) {
+    ctx.beginPath();
+    ctx.moveTo(packetNodes[e[0]].x, packetNodes[e[0]].y);
+    ctx.lineTo(packetNodes[e[1]].x, packetNodes[e[1]].y);
+    ctx.stroke();
+  });
+  // Draw nodes
+  packetNodes.forEach(function(n) {
+    ctx.fillStyle = n.color;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, 28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    var lines = n.label.split('\n');
+    lines.forEach(function(l, i) {
+      ctx.fillText(l, n.x, n.y + 4 + (i - (lines.length-1)/2) * 13);
+    });
+  });
+  // Status
+  if (statusText) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(W/2 - 160, 5, 320, 28);
+    ctx.fillStyle = '#fff';
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(statusText, W/2, 24);
+  }
+}
+
+function initPacketCanvas() {
+  var canvas = document.getElementById('packetCanvas');
+  var ctx = canvas.getContext('2d');
+  drawPacketNetwork(ctx, canvas.width, canvas.height, '点击「发送消息」开始数据包传输动画');
+}
+
 function startPacketDemo() {
   if (packetAnim) cancelAnimationFrame(packetAnim);
   var msg = document.getElementById('packetMsg').value || 'Hello!';
@@ -629,40 +890,25 @@ function startPacketDemo() {
       total: Math.ceil(msg.length / packetSize)
     });
   }
-  // Update total
   packets.forEach(function(p) { p.total = packets.length; });
 
   // Show packet table
-  var tableHTML = '<table class="demo-table"><tr><th>Packet #</th><th>Seq</th><th>Data</th><th>Source</th><th>Dest</th><th>Status</th></tr>';
+  var tableHTML = '<table class="demo-table"><tr><th>包编号 (Packet #)</th><th>序列号 (Seq)</th><th>数据 (Data)</th><th>源地址 (Source)</th><th>目的地址 (Dest)</th><th>状态 (Status)</th></tr>';
   packets.forEach(function(p) {
-    tableHTML += '<tr id="pkt-row-'+p.id+'"><td>'+p.id+'</td><td>'+p.seq+'/'+p.total+'</td><td><code>'+p.data+'</code></td><td>192.168.1.10</td><td>10.0.0.5</td><td id="pkt-status-'+p.id+'">Waiting</td></tr>';
+    tableHTML += '<tr id="pkt-row-'+p.id+'"><td>'+p.id+'</td><td>'+p.seq+'/'+p.total+'</td><td><code>'+p.data+'</code></td><td>192.168.1.10</td><td>10.0.0.5</td><td id="pkt-status-'+p.id+'">等待中...</td></tr>';
   });
   tableHTML += '</table>';
   document.getElementById('packetTable').innerHTML = tableHTML;
 
   log.innerHTML = '';
-  addLog(log, 'info', 'Splitting message "' + msg + '" into ' + packets.length + ' packets...');
+  addLog(log, 'info', '正在将消息 "' + msg + '" 拆分成 ' + packets.length + ' 个数据包...');
 
-  // Define network nodes
-  var nodes = [
-    {x: 80, y: H/2, label: 'Sender\n(Source)', color: '#2ecc71'},
-    {x: 300, y: 100, label: 'Router A', color: '#3498db'},
-    {x: 300, y: H-100, label: 'Router B', color: '#3498db'},
-    {x: 550, y: 80, label: 'Router C', color: '#e67e22'},
-    {x: 550, y: H/2, label: 'Router D', color: '#e67e22'},
-    {x: 550, y: H-80, label: 'Router E', color: '#e67e22'},
-    {x: 800, y: 100, label: 'Router F', color: '#9b59b6'},
-    {x: 800, y: H-100, label: 'Router G', color: '#9b59b6'},
-    {x: 970, y: H/2, label: 'Receiver\n(Dest)', color: '#e74c3c'},
-  ];
-
-  // Define possible routes (each packet takes a different one)
   var routes = [
-    [0, 1, 3, 6, 8],  // top route
-    [0, 2, 5, 7, 8],  // bottom route
-    [0, 1, 4, 7, 8],  // middle-top
-    [0, 2, 4, 6, 8],  // middle-bottom
-    [0, 1, 3, 4, 8],  // zigzag top
+    [0, 1, 3, 6, 8],
+    [0, 2, 5, 7, 8],
+    [0, 1, 4, 7, 8],
+    [0, 2, 4, 6, 8],
+    [0, 1, 3, 4, 8],
   ];
 
   var colors = ['#FF6B6B', '#FFD700', '#2ecc71', '#87CEEB', '#bb86fc', '#FF69B4', '#00CED1'];
@@ -674,42 +920,14 @@ function startPacketDemo() {
       progress: 0,
       color: colors[i % colors.length],
       arrived: false,
-      delay: i * 40  // stagger start
+      delay: i * 40
     };
   });
   var tick = 0;
   var arrived = [];
 
   function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    // Draw connections
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.lineWidth = 1;
-    var edges = [[0,1],[0,2],[1,3],[1,4],[2,4],[2,5],[3,6],[4,6],[4,7],[5,7],[6,8],[7,8],[3,4],[4,5]];
-    edges.forEach(function(e) {
-      ctx.beginPath();
-      ctx.moveTo(nodes[e[0]].x, nodes[e[0]].y);
-      ctx.lineTo(nodes[e[1]].x, nodes[e[1]].y);
-      ctx.stroke();
-    });
-
-    // Draw nodes
-    nodes.forEach(function(n) {
-      ctx.fillStyle = n.color;
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, 28, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
-      var lines = n.label.split('\n');
-      lines.forEach(function(l, i) {
-        ctx.fillText(l, n.x, n.y + 4 + (i - (lines.length-1)/2) * 13);
-      });
-    });
-
-    // Animate packets
+    drawPacketNetwork(ctx, W, H, '数据包传输中...');
     var allDone = true;
     activePackets.forEach(function(ap) {
       if (ap.arrived) return;
@@ -717,8 +935,8 @@ function startPacketDemo() {
       allDone = false;
 
       var r = ap.route;
-      var fromNode = nodes[r[ap.routeIdx]];
-      var toNode = nodes[r[ap.routeIdx + 1]];
+      var fromNode = packetNodes[r[ap.routeIdx]];
+      var toNode = packetNodes[r[ap.routeIdx + 1]];
       ap.progress += speed * 0.008;
 
       if (ap.progress >= 1) {
@@ -728,23 +946,20 @@ function startPacketDemo() {
           ap.arrived = true;
           arrived.push(ap.packet);
           var el = document.getElementById('pkt-status-' + ap.packet.id);
-          if (el) { el.textContent = 'Arrived (#' + arrived.length + ')'; el.style.color = '#2ecc71'; }
-          addLog(log, 'success', 'Packet ' + ap.packet.id + ' arrived! (Seq ' + ap.packet.seq + '/' + ap.packet.total + ') Data: "' + ap.packet.data + '"');
+          if (el) { el.textContent = '已到达 (#' + arrived.length + ')'; el.style.color = '#2ecc71'; }
+          addLog(log, 'success', '数据包 ' + ap.packet.id + ' 已到达！(序列号 ' + ap.packet.seq + '/' + ap.packet.total + ') 数据: "' + ap.packet.data + '"');
           if (arrived.length === packets.length) {
-            var reassembled = arrived.map(function(p){return p.data;}).join('');
-            // Sort by seq to show correct order
             var sorted = arrived.slice().sort(function(a,b){return a.seq - b.seq;});
             var correct = sorted.map(function(p){return p.data;}).join('');
-            addLog(log, 'data', 'All packets received! Arrival order: ' + arrived.map(function(p){return '#'+p.seq;}).join(', '));
-            addLog(log, 'warning', 'Reassembling in sequence order...');
-            addLog(log, 'success', 'Reassembled message: "' + correct + '"');
+            addLog(log, 'data', '所有数据包已收到！到达顺序: ' + arrived.map(function(p){return '#'+p.seq;}).join(', '));
+            addLog(log, 'warning', '按序列号重新排序组装中...');
+            addLog(log, 'success', '重组后的消息: "' + correct + '"');
           }
           return;
         }
-        addLog(log, 'info', 'Packet ' + ap.packet.id + ' reached ' + nodes[r[ap.routeIdx]].label);
+        addLog(log, 'info', '数据包 ' + ap.packet.id + ' 到达 ' + packetNodes[r[ap.routeIdx]].label.split('\n')[0]);
       }
 
-      // Draw packet
       var x = fromNode.x + (toNode.x - fromNode.x) * ap.progress;
       var y = fromNode.y + (toNode.y - fromNode.y) * ap.progress;
       ctx.fillStyle = ap.color;
@@ -765,16 +980,75 @@ function startPacketDemo() {
 
 function resetPacketDemo() {
   if (packetAnim) cancelAnimationFrame(packetAnim);
-  var ctx = document.getElementById('packetCanvas').getContext('2d');
-  ctx.clearRect(0, 0, 1050, 420);
   document.getElementById('packetTable').innerHTML = '';
-  document.getElementById('packetLog').innerHTML = '<div class="log-line log-info">&#128172; Reset. Enter a message and click "Send Message"...</div>';
+  document.getElementById('packetLog').innerHTML = '<div class="log-line log-info">&#128172; 已重置。请输入消息并点击「发送消息」...</div>';
+  initPacketCanvas();
 }
 
 // ============================================================
 // DEMO 2: DNS RESOLUTION
 // ============================================================
 var dnsAnim = null;
+var dnsServersBase = [
+  {x: 100, y: 400, label: '你的电脑\n(Your Computer)', color: '#2ecc71'},
+  {x: 300, y: 400, label: '本地DNS\n(ISP)', color: '#3498db'},
+  {x: 525, y: 120, label: '根DNS\n(Root ".")', color: '#e74c3c'},
+  {x: 750, y: 120, label: '顶级域DNS\n(TLD)', color: '#e67e22'},
+  {x: 950, y: 400, label: '权威DNS\n(Authoritative)', color: '#9b59b6'},
+];
+
+function drawDNSBase(ctx, W, H, servers, statusText) {
+  ctx.clearRect(0, 0, W, H);
+  // Background hint lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  for (var i = 0; i < servers.length - 1; i++) {
+    ctx.beginPath();
+    ctx.moveTo(servers[i].x, servers[i].y);
+    ctx.lineTo(servers[i+1].x, servers[i+1].y);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Draw servers
+  servers.forEach(function(s) {
+    ctx.fillStyle = s.color;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, 35, 0, Math.PI * 2);
+    ctx.fill();
+    // Icon
+    ctx.fillStyle = '#fff';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'center';
+    var icons = ['&#128187;','&#127968;','&#127760;','&#127463;','&#127383;'];
+    // Draw label below
+    ctx.font = 'bold 11px sans-serif';
+    var lines = s.label.split('\n');
+    lines.forEach(function(l, i) {
+      ctx.fillText(l, s.x, s.y + 50 + i * 14);
+    });
+    // Server icon text
+    ctx.font = '14px sans-serif';
+    ctx.fillText('DNS', s.x, s.y + 5);
+  });
+
+  if (statusText) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(W/2 - 180, 10, 360, 28);
+    ctx.fillStyle = '#fff';
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(statusText, W/2, 29);
+  }
+}
+
+function initDNSCanvas() {
+  var canvas = document.getElementById('dnsCanvas');
+  var ctx = canvas.getContext('2d');
+  drawDNSBase(ctx, canvas.width, canvas.height, dnsServersBase, '点击「开始解析」查看DNS域名解析过程');
+}
+
 function startDNS() {
   if (dnsAnim) { clearTimeout(dnsAnim); dnsAnim = null; }
   var domain = document.getElementById('dnsInput').value || 'www.example.com';
@@ -784,64 +1058,41 @@ function startDNS() {
   var W = canvas.width, H = canvas.height;
   log.innerHTML = '';
 
-  // Parse domain parts
   var parts = domain.split('.');
   var tld = '.' + parts[parts.length - 1];
   var sld = parts.length > 1 ? parts[parts.length - 2] : '';
-  // Generate fake IP
   var fakeIP = (Math.floor(Math.random()*200)+10) + '.' + (Math.floor(Math.random()*255)) + '.' + (Math.floor(Math.random()*255)) + '.' + (Math.floor(Math.random()*254)+1);
 
   var servers = [
-    {x: 100, y: 400, label: 'Your Computer', icon: '&#128187;', color: '#2ecc71'},
-    {x: 300, y: 400, label: 'Local DNS\n(ISP)', icon: '&#127968;', color: '#3498db'},
-    {x: 525, y: 120, label: 'Root DNS\n(".")', icon: '&#127760;', color: '#e74c3c'},
-    {x: 750, y: 120, label: 'TLD DNS\n("'+tld+'")', icon: '&#127463;', color: '#e67e22'},
-    {x: 950, y: 400, label: 'Authoritative\nDNS ("'+sld+tld+'")', icon: '&#127383;', color: '#9b59b6'},
+    {x: 100, y: 400, label: '你的电脑\n(Your PC)', color: '#2ecc71'},
+    {x: 300, y: 400, label: '本地DNS\n(ISP)', color: '#3498db'},
+    {x: 525, y: 120, label: '根DNS\n(Root ".")', color: '#e74c3c'},
+    {x: 750, y: 120, label: '顶级域DNS\n("'+tld+'")', color: '#e67e22'},
+    {x: 950, y: 400, label: '权威DNS\n("'+sld+tld+'")', color: '#9b59b6'},
   ];
 
-  // Draw static layout
   function drawBase() {
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(0, 0, W, H);
-
-    // Draw servers
-    servers.forEach(function(s) {
-      ctx.fillStyle = s.color;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, 35, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'center';
-      var lines = s.label.split('\n');
-      lines.forEach(function(l, i) {
-        ctx.fillText(l, s.x, s.y + 50 + i * 14);
-      });
-      ctx.font = '24px sans-serif';
-      ctx.fillText(s.icon, s.x, s.y + 8);
-    });
+    drawDNSBase(ctx, W, H, servers, 'DNS解析进行中...');
   }
 
-  // Animation steps
   var steps = [
-    {from: 0, to: 1, msg: 'Browser asks Local DNS: "What is the IP of ' + domain + '?"', color: '#2ecc71', type: 'query'},
-    {from: 1, to: 0, msg: 'Local DNS checks cache... NOT FOUND', color: '#e74c3c', type: 'fail'},
-    {from: 1, to: 2, msg: 'Local DNS asks Root DNS: "Where is ' + tld + '?"', color: '#3498db', type: 'query'},
-    {from: 2, to: 1, msg: 'Root DNS replies: "Try the ' + tld + ' TLD server"', color: '#e74c3c', type: 'response'},
-    {from: 1, to: 3, msg: 'Local DNS asks TLD DNS: "Where is ' + sld + tld + '?"', color: '#3498db', type: 'query'},
-    {from: 3, to: 1, msg: 'TLD DNS replies: "Try the authoritative server for ' + sld + tld + '"', color: '#e67e22', type: 'response'},
-    {from: 1, to: 4, msg: 'Local DNS asks Authoritative DNS: "What is the IP of ' + domain + '?"', color: '#3498db', type: 'query'},
-    {from: 4, to: 1, msg: 'Authoritative DNS replies: "' + domain + ' = ' + fakeIP + '"', color: '#9b59b6', type: 'response'},
-    {from: 1, to: 0, msg: 'Local DNS returns to browser: ' + domain + ' = ' + fakeIP, color: '#2ecc71', type: 'success'},
+    {from: 0, to: 1, msg: '浏览器问本地DNS："' + domain + ' 的IP是多少？"', color: '#2ecc71', type: 'info'},
+    {from: 1, to: 0, msg: '本地DNS检查缓存...未找到！', color: '#e74c3c', type: 'error'},
+    {from: 1, to: 2, msg: '本地DNS问根DNS："' + tld + ' 域的DNS在哪？"', color: '#3498db', type: 'info'},
+    {from: 2, to: 1, msg: '根DNS回复："去找 ' + tld + ' 顶级域服务器"', color: '#e74c3c', type: 'data'},
+    {from: 1, to: 3, msg: '本地DNS问顶级域DNS："' + sld + tld + ' 在哪？"', color: '#3498db', type: 'info'},
+    {from: 3, to: 1, msg: '顶级域DNS回复："去找 ' + sld + tld + ' 的权威DNS"', color: '#e67e22', type: 'data'},
+    {from: 1, to: 4, msg: '本地DNS问权威DNS："' + domain + ' 的IP是？"', color: '#3498db', type: 'info'},
+    {from: 4, to: 1, msg: '权威DNS回复："' + domain + ' = ' + fakeIP + '"', color: '#9b59b6', type: 'data'},
+    {from: 1, to: 0, msg: '本地DNS返回结果：' + domain + ' = ' + fakeIP, color: '#2ecc71', type: 'success'},
   ];
 
   var stepIdx = 0;
 
   function animateStep() {
     if (stepIdx >= steps.length) {
-      addLog(log, 'success', 'DNS resolution complete! ' + domain + ' = ' + fakeIP);
-      addLog(log, 'info', 'The browser can now connect to ' + fakeIP + ' to load the website.');
+      addLog(log, 'success', 'DNS解析完成！ ' + domain + ' = ' + fakeIP);
+      addLog(log, 'info', '浏览器现在可以连接 ' + fakeIP + ' 加载网站了。');
       return;
     }
 
@@ -850,15 +1101,13 @@ function startDNS() {
     var to = servers[step.to];
     var progress = 0;
 
-    addLog(log, step.type === 'query' ? 'info' : step.type === 'fail' ? 'error' : step.type === 'success' ? 'success' : 'data',
-           'Step ' + (stepIdx + 1) + ': ' + step.msg);
+    addLog(log, step.type, '第' + (stepIdx + 1) + '步: ' + step.msg);
 
     function animArrow() {
       drawBase();
       progress += 0.03;
       if (progress > 1) progress = 1;
 
-      // Draw arrow
       var x = from.x + (to.x - from.x) * progress;
       var y = from.y + (to.y - from.y) * progress;
 
@@ -871,21 +1120,20 @@ function startDNS() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Packet dot
       ctx.fillStyle = step.color;
       ctx.beginPath();
       ctx.arc(x, y, 8, 0, Math.PI * 2);
       ctx.fill();
 
-      // Label
       var mx = (from.x + to.x) / 2;
       var my = (from.y + to.y) / 2 - 15;
       ctx.fillStyle = 'rgba(0,0,0,0.7)';
-      ctx.fillRect(mx - 150, my - 12, 300, 24);
+      var msgText = step.msg.substring(0, 55);
+      ctx.fillRect(mx - 180, my - 12, 360, 24);
       ctx.fillStyle = '#fff';
       ctx.font = '12px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(step.msg.substring(0, 55), mx, my + 4);
+      ctx.fillText(msgText, mx, my + 4);
 
       if (progress < 1) {
         requestAnimationFrame(animArrow);
@@ -903,9 +1151,8 @@ function startDNS() {
 
 function resetDNS() {
   if (dnsAnim) clearTimeout(dnsAnim);
-  var ctx = document.getElementById('dnsCanvas').getContext('2d');
-  ctx.clearRect(0, 0, 1050, 500);
-  document.getElementById('dnsLog').innerHTML = '<div class="log-line log-info">&#128172; Enter a domain and click "Resolve"...</div>';
+  document.getElementById('dnsLog').innerHTML = '<div class="log-line log-info">&#128172; 请输入域名并点击「开始解析」...</div>';
+  initDNSCanvas();
 }
 
 // ============================================================
@@ -934,43 +1181,41 @@ function drawTopology(type, sendFrom, sendTo) {
   var info = document.getElementById('topoInfo');
 
   if (type === 'star') {
-    center = {x: W/2, y: H/2, label: 'Switch', color: '#e74c3c', r: 30};
+    center = {x: W/2, y: H/2, label: '交换机\n(Switch)', color: '#e74c3c', r: 30};
     var n = 6;
     for (var i = 0; i < n; i++) {
       var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
       var r = 170;
-      nodes.push({x: W/2 + Math.cos(angle)*r, y: H/2 + Math.sin(angle)*r, label: 'PC'+(i+1), color: '#3498db', r: 25});
-      edges.push([nodes.length - 1, -1]); // -1 = center
+      nodes.push({x: W/2 + Math.cos(angle)*r, y: H/2 + Math.sin(angle)*r, label: '电脑'+(i+1)+'\n(PC'+(i+1)+')', color: '#3498db', r: 25});
+      edges.push([nodes.length - 1, -1]);
     }
-    info.innerHTML = '<strong>Star Topology:</strong> All devices connect to a <strong>central switch/hub</strong>. If one PC fails, others still work. If the switch fails, the entire network goes down. Easy to add new devices.';
+    info.innerHTML = '<strong>星形拓扑 (Star Topology)：</strong>所有设备连接到一个<strong>中央交换机/集线器</strong>。如果一台PC故障，其他不受影响。但如果交换机故障，<strong>整个网络瘫痪</strong>（单点故障）。添加新设备很容易。';
   } else if (type === 'bus') {
     var busY = H/2;
     for (var i = 0; i < 6; i++) {
       var x = 120 + i * 160;
-      nodes.push({x: x, y: busY - 80, label: 'PC'+(i+1), color: '#2ecc71', r: 25});
+      nodes.push({x: x, y: busY - 80, label: '电脑'+(i+1)+'\n(PC'+(i+1)+')', color: '#2ecc71', r: 25});
     }
-    info.innerHTML = '<strong>Bus Topology:</strong> All devices share a single <strong>backbone cable</strong>. Data travels in both directions. If the cable breaks, the whole network fails. <strong>Collisions</strong> can occur when multiple devices transmit simultaneously.';
+    info.innerHTML = '<strong>总线形拓扑 (Bus Topology)：</strong>所有设备共享一条<strong>主干电缆 (Backbone Cable)</strong>。数据在电缆上双向传播。如果电缆断裂，<strong>整个网络瘫痪</strong>。多台设备同时发送会产生<strong>冲突 (Collision)</strong>。两端有终结器 (Terminator)。';
   } else if (type === 'mesh') {
     var n = 6;
     for (var i = 0; i < n; i++) {
       var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
       var r = 160;
-      nodes.push({x: W/2 + Math.cos(angle)*r, y: H/2 + Math.sin(angle)*r, label: 'PC'+(i+1), color: '#9b59b6', r: 25});
+      nodes.push({x: W/2 + Math.cos(angle)*r, y: H/2 + Math.sin(angle)*r, label: '电脑'+(i+1)+'\n(PC'+(i+1)+')', color: '#9b59b6', r: 25});
     }
-    // Full mesh: every node connects to every other
     for (var i = 0; i < n; i++) {
       for (var j = i + 1; j < n; j++) {
         edges.push([i, j]);
       }
     }
-    info.innerHTML = '<strong>Mesh Topology:</strong> Every device is connected to <strong>every other device</strong>. Provides <strong>redundancy</strong> and <strong>fault tolerance</strong>. If one link fails, data can take an alternative path. Very expensive due to many cables.';
+    info.innerHTML = '<strong>网状形拓扑 (Mesh Topology)：</strong>每台设备都与<strong>其他所有设备</strong>直接相连。提供极好的<strong>冗余性 (Redundancy)</strong> 和 <strong>容错性 (Fault Tolerance)</strong>。一条链路断了，数据可以走其他路径。但成本很高，因为需要大量电缆。';
   }
 
   // Draw edges
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth = 2;
   if (type === 'bus') {
-    // Draw backbone
     ctx.strokeStyle = 'rgba(255,255,255,0.3)';
     ctx.lineWidth = 4;
     ctx.beginPath();
@@ -979,13 +1224,17 @@ function drawTopology(type, sendFrom, sendTo) {
     ctx.stroke();
     // Terminators
     ctx.fillStyle = '#e74c3c';
-    ctx.fillRect(50, H/2 - 8, 16, 16);
-    ctx.fillRect(W - 66, H/2 - 8, 16, 16);
+    ctx.fillRect(46, H/2 - 10, 20, 20);
+    ctx.fillRect(W - 66, H/2 - 10, 20, 20);
     ctx.fillStyle = '#fff';
     ctx.font = '9px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('T', 58, H/2 + 4);
-    ctx.fillText('T', W - 58, H/2 + 4);
+    ctx.fillText('T', 56, H/2 + 4);
+    ctx.fillText('T', W - 56, H/2 + 4);
+    // Label backbone
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '12px sans-serif';
+    ctx.fillText('主干电缆 (Backbone Cable)', W/2, H/2 + 40);
     // Drop cables
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.lineWidth = 2;
@@ -998,10 +1247,9 @@ function drawTopology(type, sendFrom, sendTo) {
   } else if (type === 'star') {
     edges.forEach(function(e) {
       var n1 = nodes[e[0]];
-      var n2 = center;
       ctx.beginPath();
       ctx.moveTo(n1.x, n1.y);
-      ctx.lineTo(n2.x, n2.y);
+      ctx.lineTo(center.x, center.y);
       ctx.stroke();
     });
   } else {
@@ -1020,9 +1268,12 @@ function drawTopology(type, sendFrom, sendTo) {
     ctx.arc(center.x, center.y, center.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 12px sans-serif';
+    ctx.font = 'bold 10px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(center.label, center.x, center.y + 5);
+    var cLines = center.label.split('\n');
+    cLines.forEach(function(l, i) {
+      ctx.fillText(l, center.x, center.y + 4 + (i - (cLines.length-1)/2) * 12);
+    });
   }
 
   // Draw nodes
@@ -1032,9 +1283,12 @@ function drawTopology(type, sendFrom, sendTo) {
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 11px sans-serif';
+    ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(n.label, n.x, n.y + 5);
+    var nLines = n.label.split('\n');
+    nLines.forEach(function(l, idx) {
+      ctx.fillText(l, n.x, n.y + 3 + (idx - (nLines.length-1)/2) * 11);
+    });
   });
 
   // Make canvas clickable
@@ -1056,20 +1310,22 @@ function animateTopoSend(type, nodes, center, edges, fromIdx, canvas, ctx) {
   var targetIdx = (fromIdx + 3) % nodes.length;
   var from = nodes[fromIdx];
   var to = nodes[targetIdx];
+  var fromName = from.label.split('\n')[0];
+  var toName = to.label.split('\n')[0];
 
-  addLog(log, 'info', from.label + ' wants to send data to ' + to.label + '...');
+  addLog(log, 'info', fromName + ' 要向 ' + toName + ' 发送数据...');
 
   var progress = 0;
   var path = [];
   if (type === 'star') {
     path = [{x: from.x, y: from.y}, {x: center.x, y: center.y}, {x: to.x, y: to.y}];
-    addLog(log, 'data', 'Data path: ' + from.label + ' -> Switch -> ' + to.label);
+    addLog(log, 'data', '数据路径: ' + fromName + ' -> 交换机 -> ' + toName);
   } else if (type === 'bus') {
     path = [{x: from.x, y: from.y}, {x: from.x, y: canvas.height/2}, {x: to.x, y: canvas.height/2}, {x: to.x, y: to.y}];
-    addLog(log, 'warning', 'Data broadcast on bus: ALL devices receive, only ' + to.label + ' accepts');
+    addLog(log, 'warning', '数据在总线上广播：所有设备都收到，只有 ' + toName + ' 接受');
   } else {
     path = [{x: from.x, y: from.y}, {x: to.x, y: to.y}];
-    addLog(log, 'success', 'Direct link: ' + from.label + ' -> ' + to.label);
+    addLog(log, 'success', '直连链路: ' + fromName + ' -> ' + toName);
   }
 
   var segIdx = 0;
@@ -1080,7 +1336,7 @@ function animateTopoSend(type, nodes, center, edges, fromIdx, canvas, ctx) {
       segIdx++;
       progress = 0;
       if (segIdx >= path.length - 1) {
-        addLog(log, 'success', 'Data received by ' + to.label + '!');
+        addLog(log, 'success', toName + ' 已收到数据！');
         return;
       }
     }
@@ -1095,7 +1351,7 @@ function animateTopoSend(type, nodes, center, edges, fromIdx, canvas, ctx) {
     c.arc(x, y, 10, 0, Math.PI * 2);
     c.fill();
     c.fillStyle = '#000';
-    c.font = 'bold 9px sans-serif';
+    c.font = 'bold 8px sans-serif';
     c.textAlign = 'center';
     c.fillText('DATA', x, y + 3);
 
@@ -1103,9 +1359,6 @@ function animateTopoSend(type, nodes, center, edges, fromIdx, canvas, ctx) {
   }
   anim();
 }
-
-// Init topology
-setTimeout(function() { drawTopology('star'); }, 100);
 
 // ============================================================
 // DEMO 4: PROTOCOL STACK
@@ -1124,25 +1377,25 @@ function startProtocol() {
   var dstMAC = 'DD:EE:FF:' + Math.floor(Math.random()*99).toString().padStart(2,'0') + ':33:44';
 
   var steps = [
-    {layer: 5, data: 'HTTP GET / "' + msg + '"', log: 'Application Layer: Creating HTTP request with message "' + msg + '"'},
-    {layer: 4, data: '[SrcPort:'+srcPort+' DstPort:80 Seq:1] + HTTP Data', log: 'Transport Layer: Adding TCP header (ports, sequence number)'},
-    {layer: 3, data: '[Src:'+srcIP+' Dst:'+dstIP+' TTL:64] + TCP Segment', log: 'Network Layer: Adding IP header (source & destination IP)'},
-    {layer: 2, data: '['+srcMAC+' -> '+dstMAC+' CRC:0xA3F2] + IP Packet', log: 'Data Link Layer: Adding Ethernet frame (MAC addresses + error check)'},
-    {layer: 1, data: '01001000 01100101 01101100 01101100 01101111...', log: 'Physical Layer: Converting to binary signals for transmission'},
+    {layer: 5, data: 'HTTP GET / "' + msg + '"', log: '应用层 (Application)：创建HTTP请求，包含消息 "' + msg + '"'},
+    {layer: 4, data: '[源端口:'+srcPort+' 目的端口:80 序列号:1] + HTTP数据', log: '传输层 (Transport)：添加TCP头部（端口号、序列号）'},
+    {layer: 3, data: '[源IP:'+srcIP+' 目的IP:'+dstIP+' TTL:64] + TCP段', log: '网络层 (Network)：添加IP头部（源/目的IP地址）'},
+    {layer: 2, data: '['+srcMAC+' -> '+dstMAC+' CRC:0xA3F2] + IP包', log: '数据链路层 (Data Link)：添加以太网帧（MAC地址 + 错误校验CRC）'},
+    {layer: 1, data: '01001000 01100101 01101100 01101100 01101111...', log: '物理层 (Physical)：转换为二进制电信号，准备传输'},
   ];
 
   var stepIdx = 0;
   function doStep() {
     if (stepIdx >= steps.length) {
-      addLog(log, 'success', 'Encapsulation complete! Data is ready to be transmitted as electrical signals.');
-      addLog(log, 'info', 'At the receiving end, each layer strips its header (de-encapsulation).');
+      addLog(log, 'success', '封装完成！数据已准备好以电信号形式传输。');
+      addLog(log, 'info', '在接收端，每层会剥离自己的头部（解封装 De-encapsulation）。');
       return;
     }
     var step = steps[stepIdx];
     var layerEl = document.querySelector('.proto-layer[data-layer="'+step.layer+'"]');
     layerEl.classList.add('highlight');
     layerEl.querySelector('.layer-data').textContent = step.data;
-    addLog(log, 'data', 'Layer ' + step.layer + ': ' + step.log);
+    addLog(log, 'data', '第' + step.layer + '层: ' + step.log);
     stepIdx++;
     setTimeout(doStep, 1200);
   }
@@ -1152,7 +1405,7 @@ function startProtocol() {
 function resetProtocol() {
   var layers = document.querySelectorAll('.proto-layer');
   layers.forEach(function(l) { l.classList.remove('highlight'); l.querySelector('.layer-data').textContent = ''; });
-  document.getElementById('protoLog').innerHTML = '<div class="log-line log-info">&#128172; Enter a message and click "Send through layers"...</div>';
+  document.getElementById('protoLog').innerHTML = '<div class="log-line log-info">&#128172; 请输入消息并点击「逐层封装」查看封装过程...</div>';
 }
 
 // ============================================================
@@ -1163,7 +1416,7 @@ function switchChatMode(mode) {
   chatMode = mode;
   document.querySelectorAll('#demo-chat .btn-outline').forEach(function(b) { b.classList.remove('active'); });
   event.target.classList.add('active');
-  document.getElementById('chatModeTitle').textContent = mode === 'cs' ? 'Client-Server Architecture' : 'Peer-to-Peer Architecture';
+  document.getElementById('chatModeTitle').textContent = mode === 'cs' ? '客户端-服务器架构 (Client-Server)' : '点对点架构 (Peer-to-Peer)';
   drawChatArch();
   resetChat();
 }
@@ -1183,10 +1436,12 @@ function drawChatArch() {
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 11px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Server', W/2, 55);
+    ctx.fillText('服务器', W/2, 47);
+    ctx.font = '9px sans-serif';
+    ctx.fillText('(Server)', W/2, 60);
 
-    // Clients
     var clients = [{x:80,y:160},{x:250,y:160},{x:420,y:160}];
+    var labels = ['客户端A','客户端B','客户端C'];
     clients.forEach(function(c, i) {
       ctx.fillStyle = '#3498db';
       ctx.beginPath();
@@ -1194,8 +1449,7 @@ function drawChatArch() {
       ctx.fill();
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 10px sans-serif';
-      ctx.fillText('Client '+ String.fromCharCode(65+i), c.x, c.y + 4);
-      // Line to server
+      ctx.fillText(labels[i], c.x, c.y + 4);
       ctx.strokeStyle = 'rgba(255,255,255,0.2)';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -1203,9 +1457,13 @@ function drawChatArch() {
       ctx.lineTo(W/2, 80);
       ctx.stroke();
     });
+    // Label
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '11px sans-serif';
+    ctx.fillText('所有消息经过服务器转发', W/2, H - 10);
   } else {
-    // P2P
     var peers = [{x:80,y:100},{x:250,y:40},{x:420,y:100},{x:250,y:170}];
+    var pLabels = ['节点A','节点B','节点C','节点D'];
     peers.forEach(function(p, i) {
       ctx.fillStyle = '#9b59b6';
       ctx.beginPath();
@@ -1214,9 +1472,8 @@ function drawChatArch() {
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 10px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('Peer '+ String.fromCharCode(65+i), p.x, p.y + 4);
+      ctx.fillText(pLabels[i], p.x, p.y + 4);
     });
-    // Connect all
     ctx.strokeStyle = 'rgba(255,255,255,0.15)';
     ctx.lineWidth = 1;
     for (var i = 0; i < peers.length; i++) {
@@ -1227,6 +1484,10 @@ function drawChatArch() {
         ctx.stroke();
       }
     }
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('节点之间直接通信，无中央服务器', W/2, H - 10);
   }
 }
 
@@ -1240,21 +1501,20 @@ function sendChatMsg() {
   var win = document.getElementById('chatWindow');
   var log = document.getElementById('chatLog');
 
-  // Client message
   win.innerHTML += '<div class="chat-msg client"><div class="sender">' + sender + '</div>' + msg + '</div>';
 
   if (chatMode === 'cs') {
-    addLog(log, 'info', sender + ' -> Server: "' + msg + '"');
+    addLog(log, 'info', sender + ' -> 服务器 (Server): "' + msg + '"');
     setTimeout(function() {
-      addLog(log, 'data', 'Server received message, broadcasting to all clients...');
-      win.innerHTML += '<div class="chat-msg server"><div class="sender">Server (broadcast)</div>[From ' + sender + ']: ' + msg + '</div>';
-      addLog(log, 'success', 'Server -> All Clients: message delivered');
+      addLog(log, 'data', '服务器收到消息，正在广播给所有客户端...');
+      win.innerHTML += '<div class="chat-msg server"><div class="sender">服务器 (广播)</div>[来自 ' + sender + ']: ' + msg + '</div>';
+      addLog(log, 'success', '服务器 -> 所有客户端: 消息已送达');
     }, 500);
   } else {
-    addLog(log, 'info', sender + ' -> All Peers directly: "' + msg + '"');
+    addLog(log, 'info', sender + ' -> 所有节点 (直接发送): "' + msg + '"');
     setTimeout(function() {
-      win.innerHTML += '<div class="chat-msg server"><div class="sender">Direct P2P</div>[' + sender + ']: ' + msg + '</div>';
-      addLog(log, 'success', 'Message delivered directly to all peers (no server involved)');
+      win.innerHTML += '<div class="chat-msg server"><div class="sender">P2P 直连</div>[' + sender + ']: ' + msg + '</div>';
+      addLog(log, 'success', '消息已直接发送给所有节点（无需经过服务器）');
     }, 300);
   }
   win.scrollTop = win.scrollHeight;
@@ -1262,10 +1522,8 @@ function sendChatMsg() {
 
 function resetChat() {
   document.getElementById('chatWindow').innerHTML = '';
-  document.getElementById('chatLog').innerHTML = '<div class="log-line log-info">&#128172; Send a message to see how ' + (chatMode === 'cs' ? 'client-server' : 'P2P') + ' communication works...</div>';
+  document.getElementById('chatLog').innerHTML = '<div class="log-line log-info">&#128172; 选择一个客户端并发送消息，查看' + (chatMode === 'cs' ? '客户端-服务器' : '点对点') + '通信流程...</div>';
 }
-
-setTimeout(drawChatArch, 100);
 
 // ============================================================
 // DEMO 6: IP ADDRESS
@@ -1277,7 +1535,7 @@ function analyzeIP() {
 
   var parts = ip.split('.');
   if (parts.length !== 4 || parts.some(function(p) { return isNaN(p) || p < 0 || p > 255 || p === ''; })) {
-    result.innerHTML = '<span style="color:#e74c3c;">Invalid IPv4 address format</span>';
+    result.innerHTML = '<span style="color:#e74c3c;">无效的IPv4地址格式 (Invalid IPv4 address)</span>';
     binary.innerHTML = '';
     return;
   }
@@ -1285,31 +1543,29 @@ function analyzeIP() {
   var octets = parts.map(Number);
   var first = octets[0];
 
-  // Determine class
   var cls, clsColor, mask;
   if (first >= 1 && first <= 126) { cls = 'A'; clsColor = '#FF6B6B'; mask = '255.0.0.0'; }
   else if (first >= 128 && first <= 191) { cls = 'B'; clsColor = '#FFD700'; mask = '255.255.0.0'; }
   else if (first >= 192 && first <= 223) { cls = 'C'; clsColor = '#2ecc71'; mask = '255.255.255.0'; }
-  else if (first >= 224 && first <= 239) { cls = 'D (Multicast)'; clsColor = '#87CEEB'; mask = 'N/A'; }
-  else { cls = 'E (Reserved)'; clsColor = '#aaa'; mask = 'N/A'; }
+  else if (first >= 224 && first <= 239) { cls = 'D (组播 Multicast)'; clsColor = '#87CEEB'; mask = 'N/A'; }
+  else { cls = 'E (保留 Reserved)'; clsColor = '#aaa'; mask = 'N/A'; }
 
-  // Check private
   var isPrivate = false;
   var privateRange = '';
-  if (first === 10) { isPrivate = true; privateRange = '10.0.0.0 - 10.255.255.255 (Class A)'; }
-  else if (first === 172 && octets[1] >= 16 && octets[1] <= 31) { isPrivate = true; privateRange = '172.16.0.0 - 172.31.255.255 (Class B)'; }
-  else if (first === 192 && octets[1] === 168) { isPrivate = true; privateRange = '192.168.0.0 - 192.168.255.255 (Class C)'; }
-  else if (first === 127) { isPrivate = true; privateRange = 'Loopback (127.x.x.x)'; }
+  if (first === 10) { isPrivate = true; privateRange = '10.0.0.0 - 10.255.255.255 (A类)'; }
+  else if (first === 172 && octets[1] >= 16 && octets[1] <= 31) { isPrivate = true; privateRange = '172.16.0.0 - 172.31.255.255 (B类)'; }
+  else if (first === 192 && octets[1] === 168) { isPrivate = true; privateRange = '192.168.0.0 - 192.168.255.255 (C类)'; }
+  else if (first === 127) { isPrivate = true; privateRange = '回环地址 (Loopback: 127.x.x.x)'; }
 
   var html = '<div style="display:flex;gap:20px;flex-wrap:wrap;">';
   html += '<div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:12px;flex:1;min-width:200px;">';
-  html += '<div style="font-size:24px;color:'+clsColor+';font-weight:bold;">Class ' + cls + '</div>';
-  html += '<div style="margin-top:8px;">Default Mask: <code>' + mask + '</code></div>';
+  html += '<div style="font-size:24px;color:'+clsColor+';font-weight:bold;">' + cls + ' 类地址 (Class ' + cls.charAt(0) + ')</div>';
+  html += '<div style="margin-top:8px;">默认子网掩码 (Default Mask): <code>' + mask + '</code></div>';
   html += '</div>';
   html += '<div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:12px;flex:1;min-width:200px;">';
-  html += '<div style="font-size:18px;color:' + (isPrivate ? '#f39c12' : '#2ecc71') + ';font-weight:bold;">' + (isPrivate ? 'Private IP' : 'Public IP') + '</div>';
-  if (isPrivate) html += '<div style="margin-top:8px;font-size:13px;">Range: ' + privateRange + '</div>';
-  else html += '<div style="margin-top:8px;font-size:13px;">This IP can be routed on the Internet</div>';
+  html += '<div style="font-size:18px;color:' + (isPrivate ? '#f39c12' : '#2ecc71') + ';font-weight:bold;">' + (isPrivate ? '私有IP (Private)' : '公有IP (Public)') + '</div>';
+  if (isPrivate) html += '<div style="margin-top:8px;font-size:13px;">所属范围: ' + privateRange + '<br>不能直接在互联网上路由，需要NAT转换</div>';
+  else html += '<div style="margin-top:8px;font-size:13px;">此IP可以在互联网上直接路由</div>';
   html += '</div>';
   html += '</div>';
 
@@ -1322,12 +1578,14 @@ function analyzeIP() {
   var binHTML = '<div style="display:flex;gap:5px;flex-wrap:wrap;">';
   binParts.forEach(function(bp, i) {
     binHTML += '<div style="background:rgba(102,126,234,0.2);padding:8px 12px;border-radius:8px;text-align:center;">';
-    binHTML += '<div style="color:#aaa;font-size:11px;">' + octets[i] + '</div>';
+    binHTML += '<div style="color:#aaa;font-size:11px;">十进制: ' + octets[i] + '</div>';
     binHTML += '<div style="color:#fff;font-size:18px;letter-spacing:2px;">' + bp + '</div>';
+    binHTML += '<div style="color:#667eea;font-size:10px;">二进制 (8 bits)</div>';
     binHTML += '</div>';
-    if (i < 3) binHTML += '<div style="color:#667eea;font-size:24px;line-height:60px;"> . </div>';
+    if (i < 3) binHTML += '<div style="color:#667eea;font-size:24px;line-height:70px;"> . </div>';
   });
   binHTML += '</div>';
+  binHTML += '<div style="margin-top:8px;color:#aaa;font-size:12px;">共 32 位 (bits) = 4 个八位组 (octets) | 完整二进制: ' + binParts.join('.') + '</div>';
   binary.innerHTML = binHTML;
 }
 
@@ -1336,8 +1594,6 @@ function randomIP() {
   document.getElementById('ipInput').value = ips[Math.floor(Math.random() * ips.length)];
   analyzeIP();
 }
-
-setTimeout(analyzeIP, 100);
 
 // ============================================================
 // DEMO 7: BANDWIDTH
@@ -1359,7 +1615,6 @@ function calcTransfer() {
   var bw = parseFloat(document.getElementById('bandwidth').value) || 0;
   var bwUnit = document.getElementById('bwUnit').value;
 
-  // Convert to bytes
   var sizeBytes = size;
   switch(sizeUnit) {
     case 'KB': sizeBytes = size * 1000; break;
@@ -1371,7 +1626,6 @@ function calcTransfer() {
   }
   var sizeBits = sizeBytes * 8;
 
-  // Convert to bps
   var bwBps = bw;
   switch(bwUnit) {
     case 'Kbps': bwBps = bw * 1000; break;
@@ -1383,41 +1637,41 @@ function calcTransfer() {
 
   var seconds = sizeBits / bwBps;
   var timeStr;
-  if (seconds < 1) timeStr = (seconds * 1000).toFixed(1) + ' ms';
-  else if (seconds < 60) timeStr = seconds.toFixed(2) + ' seconds';
-  else if (seconds < 3600) timeStr = (seconds / 60).toFixed(1) + ' minutes';
-  else if (seconds < 86400) timeStr = (seconds / 3600).toFixed(1) + ' hours';
-  else timeStr = (seconds / 86400).toFixed(1) + ' days';
+  if (seconds < 1) timeStr = (seconds * 1000).toFixed(1) + ' 毫秒 (ms)';
+  else if (seconds < 60) timeStr = seconds.toFixed(2) + ' 秒 (seconds)';
+  else if (seconds < 3600) timeStr = (seconds / 60).toFixed(1) + ' 分钟 (minutes)';
+  else if (seconds < 86400) timeStr = (seconds / 3600).toFixed(1) + ' 小时 (hours)';
+  else timeStr = (seconds / 86400).toFixed(1) + ' 天 (days)';
 
   document.getElementById('transferResult').innerHTML =
-    '<span style="color:#667eea;">Transfer Time:</span> <span style="color:#fff;font-weight:bold;">' + timeStr + '</span>';
+    '<span style="color:#667eea;">传输时间 (Transfer Time):</span> <span style="color:#fff;font-weight:bold;">' + timeStr + '</span>';
 
   document.getElementById('transferFormula').innerHTML =
-    'File: ' + size + ' ' + sizeUnit + ' = ' + sizeBits.toLocaleString() + ' bits<br>' +
-    'Bandwidth: ' + bw + ' ' + bwUnit + ' = ' + bwBps.toLocaleString() + ' bps<br>' +
-    'Time = ' + sizeBits.toLocaleString() + ' / ' + bwBps.toLocaleString() + ' = ' + seconds.toFixed(4) + ' seconds';
+    '文件大小: ' + size + ' ' + sizeUnit + ' = ' + sizeBits.toLocaleString() + ' bits (比特)<br>' +
+    '带宽: ' + bw + ' ' + bwUnit + ' = ' + bwBps.toLocaleString() + ' bps (比特/秒)<br>' +
+    '公式: 传输时间 = 文件大小(bits) / 带宽(bps)<br>' +
+    '计算: ' + sizeBits.toLocaleString() + ' / ' + bwBps.toLocaleString() + ' = ' + seconds.toFixed(4) + ' 秒';
 
-  // Comparison
   var speeds = [
-    {name: 'Dial-up (56 Kbps)', bps: 56000},
-    {name: '3G Mobile (2 Mbps)', bps: 2000000},
-    {name: 'Ethernet (10 Mbps)', bps: 10000000},
-    {name: 'Fast Ethernet (100 Mbps)', bps: 100000000},
-    {name: '4G Mobile (50 Mbps)', bps: 50000000},
-    {name: 'Gigabit (1 Gbps)', bps: 1000000000},
-    {name: 'WiFi 6 (5 Gbps)', bps: 5000000000},
+    {name: '拨号上网 (Dial-up 56Kbps)', bps: 56000},
+    {name: '3G移动网络 (2Mbps)', bps: 2000000},
+    {name: '以太网 (Ethernet 10Mbps)', bps: 10000000},
+    {name: '4G移动网络 (50Mbps)', bps: 50000000},
+    {name: '快速以太网 (Fast Ethernet 100Mbps)', bps: 100000000},
+    {name: '千兆网 (Gigabit 1Gbps)', bps: 1000000000},
+    {name: 'WiFi 6 (5Gbps)', bps: 5000000000},
   ];
 
-  var compHTML = '<table class="demo-table"><tr><th>Connection</th><th>Speed</th><th>Time</th></tr>';
+  var compHTML = '<table class="demo-table"><tr><th>连接类型 (Connection)</th><th>速度 (Speed)</th><th>传输时间 (Time)</th></tr>';
   speeds.forEach(function(s) {
     var t = sizeBits / s.bps;
     var ts;
-    if (t < 0.001) ts = '<1 ms';
-    else if (t < 1) ts = (t * 1000).toFixed(0) + ' ms';
-    else if (t < 60) ts = t.toFixed(1) + ' sec';
-    else if (t < 3600) ts = (t / 60).toFixed(1) + ' min';
-    else if (t < 86400) ts = (t / 3600).toFixed(1) + ' hr';
-    else ts = (t / 86400).toFixed(1) + ' days';
+    if (t < 0.001) ts = '<1 毫秒';
+    else if (t < 1) ts = (t * 1000).toFixed(0) + ' 毫秒';
+    else if (t < 60) ts = t.toFixed(1) + ' 秒';
+    else if (t < 3600) ts = (t / 60).toFixed(1) + ' 分钟';
+    else if (t < 86400) ts = (t / 3600).toFixed(1) + ' 小时';
+    else ts = (t / 86400).toFixed(1) + ' 天';
 
     var highlight = Math.abs(s.bps - bwBps) < bwBps * 0.5;
     compHTML += '<tr' + (highlight ? ' style="background:rgba(102,126,234,0.15);"' : '') + '><td>' + s.name + '</td><td>' + (s.bps >= 1e9 ? (s.bps/1e9)+' Gbps' : s.bps >= 1e6 ? (s.bps/1e6)+' Mbps' : (s.bps/1e3)+' Kbps') + '</td><td>' + ts + '</td></tr>';
@@ -1425,8 +1679,6 @@ function calcTransfer() {
   compHTML += '</table>';
   document.getElementById('speedComparison').innerHTML = compHTML;
 }
-
-setTimeout(calcTransfer, 100);
 
 // ============================================================
 // DEMO 8: CSMA/CD
@@ -1442,8 +1694,14 @@ function csmaDrawBase(ctx, W, H, status) {
   ctx.lineTo(W - 80, H/2);
   ctx.stroke();
 
+  // Cable label
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('共享传输介质 (Shared Medium)', W/2, H/2 + 30);
+
   // PCs
-  [{x:180, label:'PC1', color:'#2ecc71'}, {x:870, label:'PC2', color:'#e67e22'}].forEach(function(pc) {
+  [{x:180, label:'PC1', labelCN:'电脑1', color:'#2ecc71'}, {x:870, label:'PC2', labelCN:'电脑2', color:'#e67e22'}].forEach(function(pc) {
     ctx.fillStyle = pc.color;
     ctx.beginPath();
     ctx.arc(pc.x, H/2 - 80, 30, 0, Math.PI * 2);
@@ -1455,17 +1713,21 @@ function csmaDrawBase(ctx, W, H, status) {
     ctx.lineTo(pc.x, H/2);
     ctx.stroke();
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 12px sans-serif';
+    ctx.font = 'bold 11px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(pc.label, pc.x, H/2 - 76);
+    ctx.fillText(pc.labelCN, pc.x, H/2 - 83);
+    ctx.font = '9px sans-serif';
+    ctx.fillText('(' + pc.label + ')', pc.x, H/2 - 70);
   });
 
   // Status text
   if (status) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(W/2 - 180, 15, 360, 28);
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 16px sans-serif';
+    ctx.font = 'bold 14px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(status, W/2, 40);
+    ctx.fillText(status, W/2, 35);
   }
 }
 
@@ -1477,16 +1739,16 @@ function csmaStart(pc) {
 
   if (csmaAnimId) cancelAnimationFrame(csmaAnimId);
 
-  addLog(log, 'info', 'PC' + pc + ': Listening to channel (Carrier Sense)...');
+  addLog(log, 'info', '电脑' + pc + ' (PC' + pc + ')：正在监听信道（载波侦听 Carrier Sense）...');
   var progress = 0;
   var startX = pc === 1 ? 180 : 870;
   var endX = pc === 1 ? 870 : 180;
   var color = pc === 1 ? '#2ecc71' : '#e67e22';
 
   setTimeout(function() {
-    addLog(log, 'success', 'PC' + pc + ': Channel is IDLE. Transmitting data...');
+    addLog(log, 'success', '电脑' + pc + '：信道空闲，开始发送数据！');
     function anim() {
-      csmaDrawBase(ctx, W, H, 'PC' + pc + ' Transmitting...');
+      csmaDrawBase(ctx, W, H, '电脑' + pc + ' 正在发送数据...');
       progress += 0.015;
       var x = startX + (endX - startX) * progress;
       ctx.fillStyle = color;
@@ -1495,13 +1757,14 @@ function csmaStart(pc) {
       ctx.fill();
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
       ctx.fillText('DATA', x, H/2 + 3);
 
       if (progress < 1) {
         csmaAnimId = requestAnimationFrame(anim);
       } else {
-        addLog(log, 'success', 'PC' + pc + ': Transmission complete! Data delivered.');
-        csmaDrawBase(ctx, W, H, 'Transmission Complete!');
+        addLog(log, 'success', '电脑' + pc + '：传输完成！数据成功送达。');
+        csmaDrawBase(ctx, W, H, '传输完成！');
       }
     }
     anim();
@@ -1517,17 +1780,16 @@ function csmaBothSend() {
   if (csmaAnimId) cancelAnimationFrame(csmaAnimId);
   log.innerHTML = '';
 
-  addLog(log, 'info', 'PC1: Listening... channel seems IDLE');
-  addLog(log, 'info', 'PC2: Listening... channel seems IDLE');
-  addLog(log, 'warning', 'Both PCs start transmitting at almost the same time!');
+  addLog(log, 'info', '电脑1：监听信道... 似乎空闲');
+  addLog(log, 'info', '电脑2：监听信道... 似乎空闲');
+  addLog(log, 'warning', '两台电脑几乎同时开始发送数据！');
 
   var p1 = 0, p2 = 0;
-  var collided = false;
-  var phase = 'sending'; // sending -> collision -> jam -> backoff -> retry
+  var phase = 'sending';
 
   function anim() {
     if (phase === 'sending') {
-      csmaDrawBase(ctx, W, H, 'Both transmitting...');
+      csmaDrawBase(ctx, W, H, '两台电脑同时发送中...');
       p1 += 0.015;
       p2 += 0.015;
       var x1 = 180 + (870 - 180) * p1;
@@ -1540,56 +1802,56 @@ function csmaBothSend() {
 
       if (Math.abs(x1 - x2) < 30) {
         phase = 'collision';
-        addLog(log, 'error', 'COLLISION DETECTED at the midpoint of the cable!');
-        addLog(log, 'warning', 'Both PCs send JAM signal to notify all devices...');
+        addLog(log, 'error', '冲突检测到！(COLLISION DETECTED) 数据在电缆中间相撞！');
+        addLog(log, 'warning', '两台电脑发送阻塞信号 (Jam Signal) 通知所有设备...');
         p1 = 0;
       }
       csmaAnimId = requestAnimationFrame(anim);
     } else if (phase === 'collision') {
-      csmaDrawBase(ctx, W, H, 'COLLISION!');
+      csmaDrawBase(ctx, W, H, '冲突！(COLLISION!)');
       p1 += 0.05;
-      // Flash collision
       var cx = W/2, cy = H/2;
       ctx.fillStyle = 'rgba(255,0,0,' + (0.5 + 0.5 * Math.sin(p1 * 20)) + ')';
       ctx.beginPath(); ctx.arc(cx, cy, 30 + p1*10, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = '#fff';
-      ctx.font = 'bold 18px sans-serif';
+      ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('COLLISION!', cx, cy + 6);
+      ctx.fillText('冲突! COLLISION!', cx, cy + 6);
 
       if (p1 > 1.5) {
         phase = 'backoff';
         p1 = 0;
         var wait1 = Math.floor(Math.random() * 5) + 1;
         var wait2 = Math.floor(Math.random() * 5) + 1;
-        addLog(log, 'info', 'PC1: Random backoff = ' + wait1 + ' time slots');
-        addLog(log, 'info', 'PC2: Random backoff = ' + wait2 + ' time slots');
-        addLog(log, 'data', 'PC' + (wait1 < wait2 ? '1' : '2') + ' will retry first (shorter wait)');
+        addLog(log, 'info', '电脑1：随机退避时间 (Random Backoff) = ' + wait1 + ' 个时间槽');
+        addLog(log, 'info', '电脑2：随机退避时间 (Random Backoff) = ' + wait2 + ' 个时间槽');
+        addLog(log, 'data', '电脑' + (wait1 < wait2 ? '1' : '2') + ' 等待时间更短，将先重试');
       }
       csmaAnimId = requestAnimationFrame(anim);
     } else if (phase === 'backoff') {
       p1 += 0.02;
-      csmaDrawBase(ctx, W, H, 'Waiting (random backoff)... ' + Math.floor(p1 * 3) + 's');
+      csmaDrawBase(ctx, W, H, '等待中（随机退避）... ' + Math.floor(p1 * 3) + '秒');
       if (p1 > 1.5) {
         phase = 'retry';
         p1 = 0;
-        addLog(log, 'success', 'PC1: Retrying... channel is now IDLE. Transmitting!');
+        addLog(log, 'success', '电脑1：重新尝试... 信道现在空闲。开始重新发送！');
       }
       csmaAnimId = requestAnimationFrame(anim);
     } else if (phase === 'retry') {
-      csmaDrawBase(ctx, W, H, 'PC1 Retransmitting (success!)');
+      csmaDrawBase(ctx, W, H, '电脑1 重新发送中（成功！）');
       p1 += 0.02;
       var x1 = 180 + (870 - 180) * p1;
       ctx.fillStyle = '#2ecc71';
       ctx.beginPath(); ctx.arc(x1, H/2, 12, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
       ctx.fillText('DATA', x1, H/2 + 3);
 
       if (p1 >= 1) {
-        addLog(log, 'success', 'PC1: Retransmission successful!');
-        addLog(log, 'info', 'PC2 will retry after PC1 finishes.');
-        csmaDrawBase(ctx, W, H, 'Retransmission Successful!');
+        addLog(log, 'success', '电脑1：重新发送成功！');
+        addLog(log, 'info', '电脑2 将在电脑1完成后重新发送。');
+        csmaDrawBase(ctx, W, H, '重新发送成功！');
         return;
       }
       csmaAnimId = requestAnimationFrame(anim);
@@ -1601,19 +1863,35 @@ function csmaBothSend() {
 function csmaReset() {
   if (csmaAnimId) cancelAnimationFrame(csmaAnimId);
   var canvas = document.getElementById('csmaCanvas');
-  csmaDrawBase(canvas.getContext('2d'), canvas.width, canvas.height, 'Ready - Click a button to begin');
-  document.getElementById('csmaLog').innerHTML = '<div class="log-line log-info">&#128172; Click a button to simulate CSMA/CD...</div>';
+  csmaDrawBase(canvas.getContext('2d'), canvas.width, canvas.height, '准备就绪 -- 点击按钮开始模拟');
+  document.getElementById('csmaLog').innerHTML = '<div class="log-line log-info">&#128172; 点击按钮开始模拟CSMA/CD，试试「同时发送」看冲突效果！</div>';
 }
-setTimeout(csmaReset, 100);
 
 // ============================================================
-// HELPER: LOG
+// INIT: Draw all initial canvas states on page load
 // ============================================================
-function addLog(logEl, type, msg) {
-  var time = new Date().toLocaleTimeString();
-  logEl.innerHTML += '<div class="log-line log-' + type + '">[' + time + '] ' + msg + '</div>';
-  logEl.scrollTop = logEl.scrollHeight;
-}
+window.addEventListener('DOMContentLoaded', function() {
+  // Demo 1: Packet network
+  initPacketCanvas();
+
+  // Demo 2: DNS servers
+  initDNSCanvas();
+
+  // Demo 3: Star topology
+  setTimeout(function() { drawTopology('star'); }, 50);
+
+  // Demo 5: Chat architecture
+  setTimeout(function() { drawChatArch(); }, 50);
+
+  // Demo 6: IP analysis
+  setTimeout(function() { analyzeIP(); }, 50);
+
+  // Demo 7: Bandwidth calc
+  setTimeout(function() { calcTransfer(); }, 50);
+
+  // Demo 8: CSMA/CD
+  setTimeout(function() { csmaReset(); }, 50);
+});
 </script>
 </body>
 </html>
