@@ -14,6 +14,7 @@ import re
 SITE_DIR = '/app/site'
 NOTEBOOK_DIR = '/app/notebooks'
 PAPERS_DIR = '/app/past_papers'
+DEMOS_DIR = '/app/demos'
 
 INDEX_TEMPLATE = '''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -101,6 +102,7 @@ body {
 <div class="container">
 __CHAPTERS__
 __PAST_PAPERS__
+__DEMOS__
 </div>
 <div class="footer">
   <p>Cambridge International AS & A Level Computer Science (9618)</p>
@@ -357,10 +359,12 @@ def build_site():
 
     # Build past papers section
     papers_html = build_past_papers()
+    demos_html = build_demos()
 
     # Build index.html
     index_html = INDEX_TEMPLATE.replace('__CHAPTERS__', '\n'.join(chapters_html))
     index_html = index_html.replace('__PAST_PAPERS__', papers_html)
+    index_html = index_html.replace('__DEMOS__', demos_html)
     index_path = os.path.join(SITE_DIR, 'index.html')
     with open(index_path, 'w', encoding='utf-8') as f:
         f.write(index_html)
@@ -611,6 +615,69 @@ def get_password_hash(password):
     """SHA-256 hash of password."""
     import hashlib
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+
+def build_demos():
+    """Copy demo HTML files to site and return index section."""
+    import shutil
+    if not os.path.isdir(DEMOS_DIR):
+        print('\nNo demos directory found, skipping.')
+        return ''
+
+    demos_output = os.path.join(SITE_DIR, 'demos')
+    os.makedirs(demos_output, exist_ok=True)
+
+    demo_files = sorted(glob.glob(os.path.join(DEMOS_DIR, '*.html')))
+    if not demo_files:
+        print('\nNo demo HTML files found.')
+        return ''
+
+    print(f'\nCopying demos ({len(demo_files)} files)...')
+
+    DEMO_INFO = {
+        'network_demo': ('Communication & Networks', 'Ch2 — Packet Switching, DNS, Topologies, TCP/IP, CSMA/CD'),
+    }
+
+    demo_links = []
+    for demo_path in demo_files:
+        basename = os.path.splitext(os.path.basename(demo_path))[0]
+        html_name = os.path.basename(demo_path)
+        dest = os.path.join(demos_output, html_name)
+        shutil.copy2(demo_path, dest)
+        print(f'  {html_name}')
+
+        rel_path = f'demos/{html_name}'
+        info = DEMO_INFO.get(basename)
+        if info:
+            display_name, subtitle = info
+        else:
+            display_name = basename.replace('_', ' ').title()
+            subtitle = ''
+
+        demo_links.append(
+            f'<a class="lesson" href="{rel_path}">'
+            f'<span class="lesson-icon">🎮</span>{display_name}'
+            f'{" — " + subtitle if subtitle else ""}</a>')
+
+    if not demo_links:
+        return ''
+
+    return f'''
+<div class="section-header">
+  <h2>Classroom Demos</h2>
+  <p>Interactive demonstrations for classroom teaching / 课堂互动演示</p>
+</div>
+<div class="chapter open">
+  <div class="chapter-header">
+    <div class="chapter-num" style="background:linear-gradient(135deg,#00b894,#00cec9);">🎮</div>
+    <div>
+      <div class="chapter-title">互动演示 Interactive Demos</div>
+      <div class="chapter-title-en">Visual demonstrations for key concepts</div>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="lessons">{chr(10).join(demo_links)}</div>
+</div>'''
 
 
 def build_past_papers():
