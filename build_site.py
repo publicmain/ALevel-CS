@@ -143,7 +143,7 @@ CODE_VISIBLE_CHAPTERS = {'8', '9', '10', '11', '12', '16', '18', '19', '20'}
 
 # Base CSS shared by both modes
 _BASE_CSS = '''
-body { padding: 20px; margin: 0 auto; max-width: 960px; }
+body { padding: 70px 20px 20px; margin: 0 auto; max-width: 960px; }
 .toggle-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
   background: linear-gradient(135deg, #302b63, #24243e);
@@ -160,7 +160,6 @@ body { padding: 20px; margin: 0 auto; max-width: 960px; }
   margin-left: auto;
 }
 .toggle-bar button:hover { background: #764ba2; }
-#notebook-container, .jp-Notebook, body > div { padding-top: 50px !important; }
 '''
 
 # CSS that goes in <head> - shared by both modes
