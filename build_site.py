@@ -143,7 +143,20 @@ CODE_VISIBLE_CHAPTERS = {'8', '9', '10', '11', '12', '16', '18', '19', '20'}
 
 # Base CSS shared by both modes
 _BASE_CSS = '''
-body { padding: 70px 20px 20px; margin: 0 auto; max-width: 960px; }
+body { padding: 90px 20px 20px; margin: 0 auto; max-width: 960px; }
+/* Fix clipped Chinese characters in headings (top strokes cut off) */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.5 !important;
+  padding-top: 0.2em !important;
+  overflow: visible !important;
+}
+/* Give the first heading extra top breathing room */
+.jp-Cell:first-of-type h1,
+.jp-RenderedHTMLCommon h1:first-child,
+#notebook-container h1:first-child {
+  margin-top: 0.5em !important;
+  padding-top: 0.3em !important;
+}
 .toggle-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
   background: linear-gradient(135deg, #302b63, #24243e);
