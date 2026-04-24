@@ -165,8 +165,23 @@ _PRINT_AND_PDF_CSS = '''
 
 @media print {
   .toggle-bar { display: none !important; }
-  /* Shrink base font: the 16-column color table still needs ~934pt at default
-     16px; at 13px it's ~760pt, comfortably inside our 814pt usable width. */
+  /* Jupyter hard-codes font sizes as CSS variables in PX (not em), so
+     `html { font-size }` does nothing. We have to override the vars themselves
+     — AND apply `zoom` on top as a safety net in case some rule ignores vars. */
+  :root, body {
+    --jp-ui-font-size0: 9px !important;
+    --jp-ui-font-size1: 10px !important;
+    --jp-ui-font-size2: 12px !important;
+    --jp-ui-font-size3: 14px !important;
+    --jp-content-font-size0: 9px !important;
+    --jp-content-font-size1: 11px !important;
+    --jp-content-font-size2: 13px !important;
+    --jp-content-font-size3: 15px !important;
+    --jp-content-font-size4: 18px !important;
+    --jp-content-font-size5: 22px !important;
+    --jp-code-font-size: 10px !important;
+  }
+  body { zoom: 0.88; }
   html { font-size: 13px !important; }
   /* Nuclear clamp: no element can exceed its container's width.
      Jupyter's CSS sets max-width:none on td/th/tr, which our !important beats. */
