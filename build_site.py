@@ -157,9 +157,38 @@ _PRINT_AND_PDF_CSS = '''
   font-size: 13px;
 }
 .toggle-bar a.pdf-link:hover { background: rgba(102,126,234,0.3); color: #fff !important; }
+
+/* Force A4 with reasonable margins so WeasyPrint doesn't clip wide content. */
+@page { size: A4; margin: 15mm 12mm; }
+
 @media print {
   .toggle-bar { display: none !important; }
-  body { padding: 20px !important; background: #fff !important; color: #000 !important; }
+  /* Body is 960px max-width on screen, wider than A4 portrait — reset it
+     so nothing overflows past the right edge of the PDF page. */
+  body, .jp-Notebook, #notebook-container, .container {
+    max-width: 100% !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* Long code lines and preformatted blocks must wrap, not overflow. */
+  pre, pre code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+  table {
+    max-width: 100% !important;
+    width: 100% !important;
+    font-size: 0.9em !important;
+    border-collapse: collapse !important;
+    table-layout: fixed;
+    word-break: break-word;
+  }
+  img, svg { max-width: 100% !important; height: auto !important; }
+
   h1 { color: #000 !important; border-bottom: 2px solid #333 !important; }
   h2 { color: #000 !important; background: none !important;
        border-left: 4px solid #333 !important; padding: 4px 10px !important; }
@@ -170,15 +199,14 @@ _PRINT_AND_PDF_CSS = '''
   pre code { background: none !important; }
   strong { color: #000 !important; }
   blockquote { color: #555 !important; border-left: 3px solid #999 !important; }
-  table { border-collapse: collapse !important; }
   th { background: #e0e0e0 !important; color: #000 !important; }
-  th, td { border: 1px solid #999 !important; }
+  th, td { border: 1px solid #999 !important; padding: 4px 6px !important; }
   .mark-badge { background: #555 !important; color: #fff !important; }
   a { color: #000 !important; text-decoration: none !important; }
   hr { border-top: 1px solid #ccc !important; }
   h1, h2, h3 { page-break-after: avoid; }
   pre, table { page-break-inside: avoid; }
-  img { max-width: 100%; page-break-inside: avoid; }
+  img { page-break-inside: avoid; }
 }
 '''
 
@@ -236,13 +264,14 @@ def build_notebook_toggle_bar(code_visible, pdf_url=None):
     """Build toggle bar HTML for notebook pages.
 
     pdf_url: absolute URL to the pre-generated PDF, or None if unavailable.
+    Note: the `code-hidden` class is set on the body tag at build time
+    (see _add_body_class) so PDF rendering works without JS.
     """
     pdf_link = (
         f'<a href="{pdf_url}" class="pdf-link" download>&#11015; Download PDF</a>'
         if pdf_url else ''
     )
     btn_text = 'Hide Code' if code_visible else 'Show Code'
-    init_script = '' if code_visible else "<script>document.body.classList.add('code-hidden');</script>"
     return f'''
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
@@ -253,8 +282,19 @@ def build_notebook_toggle_bar(code_visible, pdf_url=None):
     this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
   ">{btn_text}</button>
 </div>
-{init_script}
 '''
+
+
+def _add_body_class(html, cls):
+    """Add `cls` to the <body> tag's class attribute. WeasyPrint doesn't run
+    JavaScript, so any runtime class toggling must be materialized at build time
+    for it to take effect in the generated PDF."""
+    def repl(m):
+        tag = m.group(0)
+        if re.search(r'class\s*=\s*"[^"]*"', tag):
+            return re.sub(r'class\s*=\s*"([^"]*)"', lambda n: f'class="{n.group(1)} {cls}"', tag, count=1)
+        return tag.replace('<body', f'<body class="{cls}"', 1)
+    return re.sub(r'<body\b[^>]*>', repl, html, count=1)
 
 
 def build_paper_toggle_bar(pdf_url=None):
@@ -404,6 +444,13 @@ def convert_to_html(nb_path, output_dir, code_visible=False,
         content = content.replace('.ipynb"', '.html"')
         content = content.replace('.ipynb#', '.html#')
         content = content.replace(".ipynb'", ".html'")
+
+        # For non-programming chapters, code cells are hidden by a `code-hidden`
+        # class normally added by JS. WeasyPrint doesn't run JS — materialize
+        # the class directly on <body> so the PDF matches the on-screen view.
+        # (This also removes the brief "flash of visible code" on page load.)
+        if not code_visible:
+            content = _add_body_class(content, 'code-hidden')
 
         # Generate PDF BEFORE injecting the toggle bar so the PDF content stays clean.
         # @media print would hide the bar anyway, but skipping it avoids WeasyPrint
