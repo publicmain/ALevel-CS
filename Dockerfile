@@ -22,6 +22,10 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Verify WeasyPrint can render at build time — fail fast if system libs
+# or Python package versions are incompatible.
+RUN python3 -c "import weasyprint; weasyprint.HTML(string='<p>smoke 测试</p>').write_pdf('/tmp/_wp.pdf'); print('weasyprint smoke test OK')"
+
 # Configure matplotlib to use Chinese fonts
 RUN python3 -c "import matplotlib; import os; rc_path = matplotlib.matplotlib_fname(); f = open(rc_path, 'r'); content = f.read(); f.close(); content = content.replace('#font.sans-serif:', 'font.sans-serif: WenQuanYi Zen Hei, WenQuanYi Micro Hei, Noto Sans CJK SC, DejaVu Sans,'); content = content.replace('#axes.unicode_minus: True', 'axes.unicode_minus: False'); f = open(rc_path, 'w'); f.write(content); f.close(); print('matplotlibrc configured for Chinese fonts')" && \
     rm -rf /root/.cache/matplotlib /root/.matplotlib/fontlist-*.json
