@@ -1,10 +1,15 @@
 FROM python:3.11-slim
 
-# Install system dependencies including Chinese fonts
+# Install system dependencies: Chinese fonts + WeasyPrint runtime libs
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-wqy-zenhei \
     fonts-wqy-microhei \
     fonts-noto-cjk \
+    libpango-1.0-0 \
+    libpangoft2-1.0-0 \
+    libharfbuzz0b \
+    libfontconfig1 \
+    libcairo2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory

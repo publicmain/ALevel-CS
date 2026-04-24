@@ -15,6 +15,7 @@ SITE_DIR = '/app/site'
 NOTEBOOK_DIR = '/app/notebooks'
 PAPERS_DIR = '/app/past_papers'
 DEMOS_DIR = '/app/demos'
+DOWNLOADS_DIR = '/app/site/downloads'
 
 INDEX_TEMPLATE = '''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -141,6 +142,45 @@ CHAPTER_INFO = {
 # Chapters where code should be VISIBLE by default (programming-heavy)
 CODE_VISIBLE_CHAPTERS = {'8', '9', '10', '11', '12', '16', '18', '19', '20'}
 
+# Shared PDF link + print media CSS — used by both notebook and past paper pages.
+# @media print flips the dark theme to light so the generated PDF is readable and printable,
+# and hides the toggle bar entirely so it doesn't leak into the PDF.
+_PRINT_AND_PDF_CSS = '''
+.toggle-bar .spacer { flex: 1; }
+.toggle-bar a.pdf-link {
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  color: #c0c0e0 !important;
+  text-decoration: none;
+  font-size: 13px;
+}
+.toggle-bar a.pdf-link:hover { background: rgba(102,126,234,0.3); color: #fff !important; }
+@media print {
+  .toggle-bar { display: none !important; }
+  body { padding: 20px !important; background: #fff !important; color: #000 !important; }
+  h1 { color: #000 !important; border-bottom: 2px solid #333 !important; }
+  h2 { color: #000 !important; background: none !important;
+       border-left: 4px solid #333 !important; padding: 4px 10px !important; }
+  h3 { color: #222 !important; }
+  p, li { color: #000 !important; }
+  pre { background: #f5f5f5 !important; color: #000 !important; border: 1px solid #ddd !important; }
+  code { background: #f0f0f0 !important; color: #000 !important; }
+  pre code { background: none !important; }
+  strong { color: #000 !important; }
+  blockquote { color: #555 !important; border-left: 3px solid #999 !important; }
+  table { border-collapse: collapse !important; }
+  th { background: #e0e0e0 !important; color: #000 !important; }
+  th, td { border: 1px solid #999 !important; }
+  .mark-badge { background: #555 !important; color: #fff !important; }
+  a { color: #000 !important; text-decoration: none !important; }
+  hr { border-top: 1px solid #ccc !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+  pre, table { page-break-inside: avoid; }
+  img { max-width: 100%; page-break-inside: avoid; }
+}
+'''
+
 # Base CSS shared by both modes
 _BASE_CSS = '''
 body { padding: 90px 20px 20px; margin: 0 auto; max-width: 960px; }
@@ -170,10 +210,9 @@ h1, h2, h3, h4, h5, h6 {
 .toggle-bar button {
   padding: 6px 16px; font-size: 13px; cursor: pointer;
   background: #667eea; color: #fff; border: none; border-radius: 4px;
-  margin-left: auto;
 }
 .toggle-bar button:hover { background: #764ba2; }
-'''
+''' + _PRINT_AND_PDF_CSS
 
 # CSS that goes in <head> - shared by both modes
 _HEAD_CSS = '''
@@ -192,27 +231,57 @@ body.code-hidden div.code_cell div.input_area {
 </style>
 '''
 
-# Toggle bar HTML that goes right after <body> tag
-_TOGGLE_BAR_HIDDEN = '''
+def build_notebook_toggle_bar(code_visible, pdf_url=None):
+    """Build toggle bar HTML for notebook pages.
+
+    pdf_url: absolute URL to the pre-generated PDF, or None if unavailable.
+    """
+    pdf_link = (
+        f'<a href="{pdf_url}" class="pdf-link" download>&#11015; Download PDF</a>'
+        if pdf_url else ''
+    )
+    btn_text = 'Hide Code' if code_visible else 'Show Code'
+    init_script = '' if code_visible else "<script>document.body.classList.add('code-hidden');</script>"
+    return f'''
 <div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
+  <div class="spacer"></div>
+  {pdf_link}
   <button id="code-toggle-btn" onclick="
     document.body.classList.toggle('code-hidden');
     this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
-  ">Show Code</button>
+  ">{btn_text}</button>
 </div>
-<script>document.body.classList.add('code-hidden');</script>
+{init_script}
 '''
 
-_TOGGLE_BAR_VISIBLE = '''
-<div class="toggle-bar">
+
+def build_paper_toggle_bar(pdf_url=None):
+    """Build toggle bar HTML for past paper pages."""
+    pdf_link = (
+        f'<a href="{pdf_url}" class="pdf-link" download>&#11015; Download PDF</a>'
+        if pdf_url else ''
+    )
+    return f'''<div class="toggle-bar">
   <a href="/index.html">&#8592; Back to Index</a>
-  <button id="code-toggle-btn" onclick="
-    document.body.classList.toggle('code-hidden');
-    this.textContent = document.body.classList.contains('code-hidden') ? 'Show Code' : 'Hide Code';
-  ">Hide Code</button>
-</div>
-'''
+  <div class="spacer"></div>
+  {pdf_link}
+</div>'''
+
+
+def generate_pdf(html_content, pdf_path, base_url=None):
+    """Render HTML string to PDF via WeasyPrint. Returns True on success."""
+    try:
+        import weasyprint
+        os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+        kwargs = {'string': html_content}
+        if base_url:
+            kwargs['base_url'] = base_url
+        weasyprint.HTML(**kwargs).write_pdf(pdf_path)
+        return True
+    except Exception as e:
+        print(f'  PDF gen failed ({os.path.basename(pdf_path)}): {type(e).__name__}: {e}')
+        return False
 
 
 def execute_notebook(nb_path):
@@ -232,11 +301,14 @@ def execute_notebook(nb_path):
         return False
 
 
-def convert_to_html(nb_path, output_dir, code_visible=False):
-    """Convert notebook to HTML.
+def convert_to_html(nb_path, output_dir, code_visible=False,
+                    pdf_abs_path=None, pdf_rel_url=None):
+    """Convert notebook to HTML; optionally also generate a companion PDF.
 
     Args:
         code_visible: If True, code cells are shown by default (for programming chapters)
+        pdf_abs_path: Absolute path where PDF should be written. If None, no PDF is generated.
+        pdf_rel_url:  URL to the PDF (relative to site root) used in the Download PDF button.
     """
     os.makedirs(output_dir, exist_ok=True)
     basename = os.path.splitext(os.path.basename(nb_path))[0]
@@ -250,30 +322,43 @@ def convert_to_html(nb_path, output_dir, code_visible=False):
             nb_path
         ], check=True, capture_output=True, timeout=60)
 
-        # Inject custom CSS/JS for toggle bar
-        if os.path.exists(html_path):
-            with open(html_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            # CSS goes in <head>
-            content = content.replace('</head>', _HEAD_CSS + '</head>')
-            # Toggle bar + script go right after <body ...> tag
-            toggle_bar = _TOGGLE_BAR_VISIBLE if code_visible else _TOGGLE_BAR_HIDDEN
-            body_match = re.search(r'<body[^>]*>', content)
-            if body_match:
-                insert_pos = body_match.end()
-                content = content[:insert_pos] + '\n' + toggle_bar + content[insert_pos:]
-            # Remove inline display styles on code cells set by old toggle
-            content = re.sub(
-                r'(class="jp-Cell-inputWrapper"[^>]*) style="display:\s*\w+;?"',
-                r'\1',
-                content
-            )
-            # Fix internal links: .ipynb -> .html
-            content = content.replace('.ipynb"', '.html"')
-            content = content.replace('.ipynb#', '.html#')
-            content = content.replace(".ipynb'", ".html'")
-            with open(html_path, 'w', encoding='utf-8') as f:
-                f.write(content)
+        if not os.path.exists(html_path):
+            return None
+
+        with open(html_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        # CSS goes in <head>
+        content = content.replace('</head>', _HEAD_CSS + '</head>')
+        # Remove inline display styles on code cells set by old toggle
+        content = re.sub(
+            r'(class="jp-Cell-inputWrapper"[^>]*) style="display:\s*\w+;?"',
+            r'\1',
+            content
+        )
+        # Fix internal links: .ipynb -> .html
+        content = content.replace('.ipynb"', '.html"')
+        content = content.replace('.ipynb#', '.html#')
+        content = content.replace(".ipynb'", ".html'")
+
+        # Generate PDF BEFORE injecting the toggle bar so the PDF content stays clean.
+        # @media print would hide the bar anyway, but skipping it avoids WeasyPrint
+        # ever laying out UI chrome that will be discarded.
+        pdf_ok = False
+        if pdf_abs_path:
+            pdf_ok = generate_pdf(content, pdf_abs_path, base_url=html_path)
+
+        # Now inject toggle bar with the download link (only if PDF generation succeeded).
+        toggle_bar = build_notebook_toggle_bar(
+            code_visible,
+            pdf_url=pdf_rel_url if pdf_ok else None,
+        )
+        body_match = re.search(r'<body[^>]*>', content)
+        if body_match:
+            insert_pos = body_match.end()
+            content = content[:insert_pos] + '\n' + toggle_bar + content[insert_pos:]
+
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(content)
         return html_path
     except Exception as e:
         print(f'  Warning: conversion failed for {nb_path}')
@@ -341,7 +426,13 @@ def build_site():
 
             # Convert to HTML (show code for programming chapters)
             show_code = str(ch_num) in CODE_VISIBLE_CHAPTERS
-            html_path = convert_to_html(nb_path, output_dir, code_visible=show_code)
+            nb_basename = os.path.splitext(os.path.basename(nb_path))[0]
+            pdf_abs_path = os.path.join(DOWNLOADS_DIR, ch_dir, nb_basename + '.pdf')
+            pdf_rel_url = f'/downloads/{ch_dir}/{nb_basename}.pdf'
+            html_path = convert_to_html(
+                nb_path, output_dir, code_visible=show_code,
+                pdf_abs_path=pdf_abs_path, pdf_rel_url=pdf_rel_url,
+            )
             if html_path:
                 nb_name = os.path.splitext(os.path.basename(nb_path))[0]
                 # Clean up display name
@@ -426,12 +517,11 @@ th, td { border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; text-align
 th { background: rgba(102,126,234,0.2); color: #fff; }
 .mark-badge { display: inline-block; background: #667eea; color: #fff;
               padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-left: 5px; }
+''' + _PRINT_AND_PDF_CSS + '''
 </style>
 </head>
 <body>
-<div class="toggle-bar">
-  <a href="/index.html">&#8592; Back to Index</a>
-</div>
+__TOGGLE_BAR__
 __CONTENT__
 </body>
 </html>'''
@@ -562,6 +652,7 @@ th { background: rgba(102,126,234,0.2); color: #fff; }
 #password-gate button:hover { opacity: 0.9; }
 #password-gate .error { color: #e74c3c; margin-top: 10px; display: none; }
 #answer-content { display: none; }
+''' + _PRINT_AND_PDF_CSS + '''
 </style>
 </head>
 <body>
@@ -728,7 +819,7 @@ def build_past_papers():
         is_hw_answer = 'Homework_Answers' in basename or 'Homework_Answer' in basename
 
         if is_hw_answer:
-            # Password-protected page
+            # Password-protected page — no PDF (content is encrypted).
             html_content = md_to_html(md_content)
             encrypted = encrypt_content(html_content, HOMEWORK_ANSWER_PASSWORD)
             pass_hash = get_password_hash(HOMEWORK_ANSWER_PASSWORD)
@@ -738,9 +829,23 @@ def build_past_papers():
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(page)
         else:
-            # Normal page
+            # Normal page: generate PDF, then inject toggle bar with download link if OK.
             html_content = md_to_html(md_content)
-            page = PAPER_HTML_TEMPLATE.replace('__TITLE__', title).replace('__CONTENT__', html_content)
+            pdf_abs_path = os.path.join(DOWNLOADS_DIR, 'papers', basename + '.pdf')
+            pdf_rel_url = f'/downloads/papers/{basename}.pdf'
+
+            # Render a PDF-only version (no toggle bar) so the PDF is clean.
+            pdf_page = (PAPER_HTML_TEMPLATE
+                        .replace('__TITLE__', title)
+                        .replace('__TOGGLE_BAR__', '')
+                        .replace('__CONTENT__', html_content))
+            pdf_ok = generate_pdf(pdf_page, pdf_abs_path, base_url=html_path)
+
+            toggle_bar = build_paper_toggle_bar(pdf_rel_url if pdf_ok else None)
+            page = (PAPER_HTML_TEMPLATE
+                    .replace('__TITLE__', title)
+                    .replace('__TOGGLE_BAR__', toggle_bar)
+                    .replace('__CONTENT__', html_content))
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(page)
 
