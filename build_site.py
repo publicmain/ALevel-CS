@@ -158,11 +158,25 @@ _PRINT_AND_PDF_CSS = '''
 }
 .toggle-bar a.pdf-link:hover { background: rgba(102,126,234,0.3); color: #fff !important; }
 
-/* Force A4 with reasonable margins so WeasyPrint doesn't clip wide content. */
-@page { size: A4; margin: 15mm 12mm; }
+/* A4 landscape gives us ~277mm usable width — enough for wide notebook
+   content (16-column color tables, matplotlib plots) that A4 portrait clips.
+   Past-paper text pages are fine in landscape too; they just have extra whitespace. */
+@page { size: A4 landscape; margin: 10mm 10mm; }
 
 @media print {
   .toggle-bar { display: none !important; }
+  /* Nuclear clamp: no element can exceed its container's width.
+     Jupyter's CSS sets max-width:none on td/th/tr, which our !important beats. */
+  *, *::before, *::after {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* Root-level safety net: anything that somehow escapes max-width gets clipped. */
+  html, body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
   /* Body is 960px max-width on screen, wider than A4 portrait — reset it
      so nothing overflows past the right edge of the PDF page. */
   body, .jp-Notebook, #notebook-container, .container {
@@ -182,10 +196,14 @@ _PRINT_AND_PDF_CSS = '''
   table {
     max-width: 100% !important;
     width: 100% !important;
-    font-size: 0.9em !important;
+    font-size: 0.85em !important;
     border-collapse: collapse !important;
-    table-layout: fixed;
-    word-break: break-word;
+    table-layout: fixed !important;
+  }
+  th, td {
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    overflow: hidden !important;
   }
   img, svg { max-width: 100% !important; height: auto !important; }
 
