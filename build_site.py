@@ -161,10 +161,13 @@ _PRINT_AND_PDF_CSS = '''
 /* A4 landscape gives us ~277mm usable width — enough for wide notebook
    content (16-column color tables, matplotlib plots) that A4 portrait clips.
    Past-paper text pages are fine in landscape too; they just have extra whitespace. */
-@page { size: A4 landscape; margin: 10mm 10mm; }
+@page { size: A4 landscape; margin: 8mm 8mm; }
 
 @media print {
   .toggle-bar { display: none !important; }
+  /* Shrink base font: the 16-column color table still needs ~934pt at default
+     16px; at 13px it's ~760pt, comfortably inside our 814pt usable width. */
+  html { font-size: 13px !important; }
   /* Nuclear clamp: no element can exceed its container's width.
      Jupyter's CSS sets max-width:none on td/th/tr, which our !important beats. */
   *, *::before, *::after {
@@ -214,7 +217,7 @@ _PRINT_AND_PDF_CSS = '''
   table {
     max-width: 100% !important;
     width: 100% !important;
-    font-size: 0.85em !important;
+    font-size: 0.8em !important;
     border-collapse: collapse !important;
     table-layout: fixed !important;
   }
