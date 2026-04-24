@@ -158,31 +158,22 @@ _PRINT_AND_PDF_CSS = '''
 }
 .toggle-bar a.pdf-link:hover { background: rgba(102,126,234,0.3); color: #fff !important; }
 
-/* A4 landscape gives us ~277mm usable width — enough for wide notebook
-   content (16-column color tables, matplotlib plots) that A4 portrait clips.
-   Past-paper text pages are fine in landscape too; they just have extra whitespace. */
-@page { size: A4 landscape; margin: 8mm 8mm; }
+/* After many iterations trying A4 landscape + shrink rules, WeasyPrint 62.3
+   still lays out the 4-col "颜色编号" markdown table at ~945pt (we don't have
+   local WeasyPrint to diagnose the exact layout bug). Switch to A3 landscape:
+   1190×842pt with 15mm margins gives ~1106pt usable — plenty of room for any
+   notebook content. Users who want to print on A4 paper select "fit to page". */
+@page { size: A3 landscape; margin: 15mm 15mm; }
 
 @media print {
   .toggle-bar { display: none !important; }
-  /* Jupyter hard-codes font sizes as CSS variables in PX (not em), so
-     `html { font-size }` does nothing. We have to override the vars themselves
-     — AND apply `zoom` on top as a safety net in case some rule ignores vars. */
+  /* Still shrink Jupyter's hard-coded px font sizes so text density is
+     reasonable on a bigger page (otherwise text looks tiny on A3). */
   :root, body {
-    --jp-ui-font-size0: 9px !important;
-    --jp-ui-font-size1: 10px !important;
-    --jp-ui-font-size2: 12px !important;
-    --jp-ui-font-size3: 14px !important;
-    --jp-content-font-size0: 9px !important;
-    --jp-content-font-size1: 11px !important;
-    --jp-content-font-size2: 13px !important;
-    --jp-content-font-size3: 15px !important;
-    --jp-content-font-size4: 18px !important;
-    --jp-content-font-size5: 22px !important;
-    --jp-code-font-size: 10px !important;
+    --jp-ui-font-size1: 12px !important;
+    --jp-content-font-size1: 13px !important;
+    --jp-code-font-size: 12px !important;
   }
-  body { zoom: 0.88; }
-  html { font-size: 13px !important; }
   /* Nuclear clamp: no element can exceed its container's width.
      Jupyter's CSS sets max-width:none on td/th/tr, which our !important beats. */
   *, *::before, *::after {
