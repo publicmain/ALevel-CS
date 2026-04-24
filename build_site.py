@@ -10,6 +10,7 @@ import glob
 import os
 import json
 import re
+import traceback
 
 SITE_DIR = '/app/site'
 NOTEBOOK_DIR = '/app/notebooks'
@@ -269,8 +270,45 @@ def build_paper_toggle_bar(pdf_url=None):
 </div>'''
 
 
+# Build diagnostics — written to /app/site/pdf-diag.txt at end of build so it can
+# be fetched remotely to diagnose PDF generation failures without Railway log access.
+_PDF_DIAG = []
+_PDF_FAIL_COUNT = 0
+
+
+def _log_diag(msg):
+    print(msg)
+    _PDF_DIAG.append(msg)
+
+
+def check_weasyprint():
+    """Loud smoke test at build start: verifies weasyprint imports AND can render."""
+    _log_diag('=== WeasyPrint smoke test ===')
+    try:
+        import weasyprint
+        _log_diag(f'weasyprint version: {weasyprint.__version__}')
+    except Exception as e:
+        _log_diag(f'import FAILED: {type(e).__name__}: {e}')
+        _log_diag(traceback.format_exc())
+        return False
+    try:
+        # Render a minimal page with CJK to exercise font resolution.
+        weasyprint.HTML(
+            string='<html><body><p>test 测试 English</p></body></html>'
+        ).write_pdf('/tmp/_wp_smoketest.pdf')
+        sz = os.path.getsize('/tmp/_wp_smoketest.pdf')
+        os.remove('/tmp/_wp_smoketest.pdf')
+        _log_diag(f'smoke render OK ({sz} bytes)')
+        return True
+    except Exception as e:
+        _log_diag(f'smoke render FAILED: {type(e).__name__}: {e}')
+        _log_diag(traceback.format_exc())
+        return False
+
+
 def generate_pdf(html_content, pdf_path, base_url=None):
     """Render HTML string to PDF via WeasyPrint. Returns True on success."""
+    global _PDF_FAIL_COUNT
     try:
         import weasyprint
         os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
@@ -280,12 +318,39 @@ def generate_pdf(html_content, pdf_path, base_url=None):
         weasyprint.HTML(**kwargs).write_pdf(pdf_path)
         return True
     except Exception as e:
-        print(f'  PDF gen failed ({os.path.basename(pdf_path)}): {type(e).__name__}: {e}')
+        _PDF_FAIL_COUNT += 1
+        name = os.path.basename(pdf_path)
+        msg = f'  PDF gen failed ({name}): {type(e).__name__}: {e}'
+        print(msg)
+        # Capture full traceback for the first 3 failures only (avoid log spam).
+        if _PDF_FAIL_COUNT <= 3:
+            tb = traceback.format_exc()
+            _PDF_DIAG.append(msg + '\n' + tb)
+        else:
+            _PDF_DIAG.append(msg)
+        return False
+
+
+def _notebook_has_outputs(nb_path):
+    """Return True if at least one code cell already has cached outputs."""
+    try:
+        with open(nb_path, 'r', encoding='utf-8') as f:
+            nb = json.load(f)
+        for cell in nb.get('cells', []):
+            if cell.get('cell_type') == 'code' and cell.get('outputs'):
+                return True
+        return False
+    except Exception:
         return False
 
 
 def execute_notebook(nb_path):
-    """Pre-execute a notebook in place."""
+    """Pre-execute a notebook in place. Skipped if already has outputs,
+    which is the biggest build-time saving — re-executing every notebook
+    each build cost many minutes. Set FORCE_EXEC=1 to re-execute anyway."""
+    if os.environ.get('FORCE_EXEC') != '1' and _notebook_has_outputs(nb_path):
+        print(f'  Skip exec (cached outputs): {os.path.basename(nb_path)}')
+        return True
     print(f'  Executing: {os.path.basename(nb_path)}')
     try:
         subprocess.run([
@@ -380,6 +445,10 @@ def extract_chapter_cn_title(dirname):
 def build_site():
     os.makedirs(SITE_DIR, exist_ok=True)
 
+    # Run WeasyPrint smoke test up front so any fatal config issue is
+    # visible at the top of the build log and captured in pdf-diag.txt.
+    check_weasyprint()
+
     # Find all chapter directories
     chapter_dirs = sorted(
         [d for d in os.listdir(NOTEBOOK_DIR)
@@ -473,6 +542,14 @@ def build_site():
         f.write(index_html)
     print(f'\n✅ Site built at {SITE_DIR}')
     print(f'   Index: {index_path}')
+
+    # Write PDF build diagnostics to a known URL so the site operator can
+    # fetch /pdf-diag.txt after deploy and see exactly why generation failed.
+    _log_diag(f'\nPDF generation failures: {_PDF_FAIL_COUNT}')
+    diag_path = os.path.join(SITE_DIR, 'pdf-diag.txt')
+    with open(diag_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(_PDF_DIAG))
+    print(f'   PDF diag: {diag_path}')
 
 
 # Past papers HTML template for individual question pages

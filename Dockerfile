@@ -1,16 +1,19 @@
 FROM python:3.11-slim
 
 # Install system dependencies: Chinese fonts + WeasyPrint runtime libs
+# fontconfig (not just libfontconfig1) provides fc-cache + fonts.conf —
+# without it WeasyPrint can't resolve the CJK fonts and every render fails.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-wqy-zenhei \
     fonts-wqy-microhei \
     fonts-noto-cjk \
+    fontconfig \
     libpango-1.0-0 \
     libpangoft2-1.0-0 \
     libharfbuzz0b \
     libfontconfig1 \
-    libcairo2 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && fc-cache -f
 
 # Set working directory
 WORKDIR /app
