@@ -181,11 +181,29 @@ _PRINT_AND_PDF_CSS = '''
      so nothing overflows past the right edge of the PDF page. */
   body, .jp-Notebook, #notebook-container, .container {
     max-width: 100% !important;
-    width: auto !important;
+    width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
     background: #fff !important;
     color: #000 !important;
+  }
+  /* Jupyter uses display:flex on cell-inputWrapper and display:table on
+     jp-InputArea / jp-OutputArea-child — WeasyPrint's table algorithm under
+     flex chain miscomputes widths, so inner tables and prompts push content
+     past the page edge. Flatten everything to plain block flow for PDF. */
+  main, .jp-Cell, .jp-Cell-inputWrapper, .jp-Cell-outputWrapper,
+  .jp-InputArea, .jp-OutputArea, .jp-OutputArea-child, .jp-OutputArea-output,
+  .jp-RenderedHTMLCommon, .jp-RenderedMarkdown, .jp-MarkdownOutput {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: auto !important;
+  }
+  /* The "In [n]:" / "Out [n]:" prompts are a left gutter column that takes
+     space without adding information — hide in PDF. */
+  .jp-InputPrompt, .jp-OutputPrompt,
+  .jp-InputArea-prompt, .jp-OutputArea-prompt {
+    display: none !important;
   }
   /* Long code lines and preformatted blocks must wrap, not overflow. */
   pre, pre code {
